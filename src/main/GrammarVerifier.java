@@ -14,7 +14,7 @@ public class GrammarVerifier {
 
     public static void main(String[] args){
         try {
-            File NLPArchFile = new File("./src/data/CoffeeMaker1.txt");
+            File NLPArchFile = new File("./src/data/CoffeeMaker2.txt");
             FileInputStream is = new FileInputStream(NLPArchFile);
             TextToAADLLexer textToAADLLexer = new TextToAADLLexer(CharStreams.fromStream(is));
             CommonTokenStream tokens = new CommonTokenStream(textToAADLLexer);
