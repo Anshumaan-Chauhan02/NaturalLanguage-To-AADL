@@ -1,21 +1,14 @@
 package main;
 import java.lang.*;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 import lib.TextToAADLParser;
 import lib.TextToAADLVisitor;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
-import org.antlr.v4.runtime.tree.TerminalNode;
-
 
 public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements TextToAADLVisitor<Object> {
     String[] system_names =new String[20];
     String[] created_systems =new String[20];
-    String[][] system_declaration=new String[30][2];
-    String[] sys_features=new String[20];
-    int index_features=0;
-    int index=0;
-    int index_created=0;
+    int index_sys=0;
     /**
      * Visit a parse tree produced by {@link TextToAADLParser#nlparch}.
      *
@@ -72,8 +65,11 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
 //            Output ax=new Output();
 //            ax.struct_to_aadl(ctx);
 
+        String[][] system_declaration=new String[30][2];
         String[] system_consists=new String[10];
+        int index_created=0;
         int index_consists=0;
+        int index=0;
         String ctx_construction=ctx.getText();
         boolean var=false;
         StringTokenizer st = new StringTokenizer(ctx_construction,",. ");
@@ -92,8 +88,12 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 continue;
             }
             else {
-
-                    for (int i = 0; i <= index - 1; i++) {
+                if (index_sys == 0) {
+                    system_names[index] = token_name;
+                    index = index + 1;
+                } else
+                {
+                    for (int i = 0; i <= index_sys - 1; i++) {
 
                         if (token_name.equals(system_names[i])) {
                             var = true;
@@ -104,7 +104,7 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                     system_names[index] = token_name;
                     index = index + 1;
                 }
-                var=false;
+            }
             }
             if(token_name.equals("\n")) {
 
@@ -117,7 +117,6 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
         }
         boolean check_sys_name=false;
         for(int i=0;i<=index-1;i++) {
-            check_sys_name=false;
             String x[] = new String[2];
             for (int j = 0; j <= index_created-1; j++) {
                 if (system_names[i].equals(created_systems[j])) {
@@ -134,7 +133,6 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                     system_declaration[i][k] = x[k];
 
                 }
-
             }
         }
                     for(int i=0;i<=index-1;i++) {
@@ -187,9 +185,12 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                         system_declaration[i][1]=newString;
                 }
 
+//                    System.out.println(system_declaration[i][0]);
+//                    System.out.println(system_declaration[i][1]);
             }
         return null;
     }
+
 
     public String subcomponents_generation(String[] args)
     {
@@ -201,7 +202,7 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             }
             else
             {
-                ret_subcomponent = ret_subcomponent +"\t\t"+"this_"+args[i]+": system "+args[i]+".work;"+"\n";
+                ret_subcomponent = ret_subcomponent +"\t\t"+"this_"+args[i]+": system "+args[i]+";"+"\n";
             }
 
         }
@@ -211,15 +212,13 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
     public String[] system_generate(String sys_name) {
         String system_start="system "+sys_name;
         String system_end="end "+sys_name+";"+"\n";
-        String system_imp_start= "system implementation "+sys_name+".work"+"\n";
+        String system_imp_start= system_start+".work"+"\n";
         String system_imp_end="end "+sys_name+".work;"+"\n";
         String[] sys_return =new String[2];
         sys_return[0]=system_start+"\n"+system_end;
         sys_return[1]=system_imp_start+system_imp_end;
         return sys_return;
     }
-
-
     /**
      * Visit a parse tree produced by {@link TextToAADLParser#functional_stmt}.
      *
@@ -229,73 +228,6 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
     @Override
     public Object visitFunctional_stmt(TextToAADLParser.Functional_stmtContext ctx) {
 //        System.out.println(ctx.getText());
-//        System.out.println(ctx.multi_flow().getText());
-//        System.out.println(ctx.FUNC_VERB());
-//        if(ctx.flow()!=null)
-//        {
-//            System.out.println("Flow in stmt="+ctx.flow().getText());
-//        }
-        String ctx_construction=ctx.getText();
-        StringTokenizer st = new StringTokenizer(ctx_construction);
-        int token_number=0;
-        while(st.hasMoreTokens()) {
-            String token_name = st.nextToken();
-            boolean check_uppercase=false;
-            for(int j=0;j<=token_name.length()-1;j++)
-            {
-                char d = token_name.charAt(j);
-                if(!((Character.isUpperCase(d)) || (token_name.charAt(j)=='_')))
-                {
-                    check_uppercase=true;
-                }
-            }
-            if (!check_uppercase) {
-                String newString = "";
-                boolean var = false;
-                int index_true = 0;
-                for (int i = 0; i <= index - 1; i++) {
-                    if (token_name.equals(system_names[i])) {
-                        var = true;
-                        index_true = i;
-                    }
-                }
-                if (var) {
-                    boolean already_features = false;
-                    boolean newline_var = false;
-                    for (int i = 0; i <= index_true - 1; i++) {
-                        if (token_name.equals(sys_features[i])) {
-                            already_features = true;
-                        }
-                    }
-                    if (!already_features) {
-                        for (int l = 0; l <= system_declaration[index_true][0].length() - 1; l++) {
-                            if ((system_declaration[index_true][0].charAt(l) == '\n') && (!newline_var)) {
-                                newString = newString + "\n\tfeatures\n";
-                                Iterator<TerminalNode> verbs_used=ctx.FUNC_VERB().iterator();
-                                while(verbs_used.hasNext())
-                                { String current_verb=verbs_used.next().toString();
-                                    if((current_verb.equals("receives"))||(current_verb.equals("imports")))
-                                    {
-                                        newString=newString+"\t\t : in data port;\n";
-                                    }
-                                    if((current_verb.equals("transfers"))||(current_verb.equals("distributes")))
-                                    {
-                                        newString=newString+"\t\t : out data port;\n";
-                                    }
-                                }
-                                sys_features[index_features] = system_names[index_true];
-                                index_features = index_features + 1;
-                                newline_var = true;
-                            } else {
-                                newString = newString + system_declaration[index_true][0].charAt(l);
-                            }
-                        }
-                        system_declaration[index_true][0] = newString;
-                    }
-                    token_number = token_number + 1;
-                }
-            }
-        }
         return null;
     }
 
@@ -354,5 +286,70 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
     @Override
     public Object visitMaterial(TextToAADLParser.MaterialContext ctx) {
         return visitChildren(ctx);
+    }
+
+    @Override
+    public Object visitComma(TextToAADLParser.CommaContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitAnd(TextToAADLParser.AndContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitEnd(TextToAADLParser.EndContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitIt(TextToAADLParser.ItContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitTo(TextToAADLParser.ToContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitThem(TextToAADLParser.ThemContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitFrom(TextToAADLParser.FromContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitStruct_verb(TextToAADLParser.Struct_verbContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitFunc_verb(TextToAADLParser.Func_verbContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitEnergy(TextToAADLParser.EnergyContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitSolid(TextToAADLParser.SolidContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitLiquid(TextToAADLParser.LiquidContext ctx) {
+        return null;
+    }
+
+    @Override
+    public Object visitGas(TextToAADLParser.GasContext ctx) {
+        return null;
     }
 }
