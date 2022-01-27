@@ -5,31 +5,71 @@ grammar TextToAADL;
 }
 
 nlparch : sentences+;
+
 sentences: sentence+;
+
 sentence : (structural_stmt+)| (functional_stmts+) ;
-functional_stmts: ((functional_stmt)|(energizing_stmt)) end ;
-structural_stmt : Struct_noun struct_verb struct_multinoun end;
-functional_stmt: (Struct_noun func_verb multi_flow)
-                 ((from Struct_noun)? (to Struct_noun)?|(and func_verb it to (flow|Struct_noun)))?;
-energizing_stmt: Struct_noun func_verb multi_flow and energy_verb (it|them) to multi_flow;
-struct_multinoun : (Struct_noun comma struct_multinoun) | (Struct_noun and Struct_noun) | (Struct_noun) ;
-multi_flow: flow | (flow and flow ) | (flow comma multi_flow);
-flow : material | energy | SIGNAL;
-material : solid | liquid | gas;
+
+functional_stmts: ((functional_stmt)|(energizing_stmt)) End WS;
+
+structural_stmt : Struct_noun WS Struct_verb WS struct_multinoun End WS;
+
+functional_stmt: (Struct_noun WS FUNC_VERB WS multi_flow WS FROM WS Struct_noun WS TO WS Struct_noun)|
+                  (Struct_noun WS FUNC_VERB WS multi_flow WS TO WS Struct_noun) |
+                  (Struct_noun WS FUNC_VERB WS multi_flow WS FROM WS Struct_noun)|
+                  (Struct_noun WS FUNC_VERB WS multi_flow WS And WS FUNC_VERB WS IT WS TO WS flow)|
+                  (Struct_noun WS FUNC_VERB WS multi_flow);
+
+energizing_stmt: Struct_noun WS FUNC_VERB WS multi_flow WS And WS FUNC_VERB WS TO WS multi_flow;
+
+struct_multinoun : (Struct_noun WS Comma WS struct_multinoun) |
+                    (Struct_noun WS And WS Struct_noun) |
+                    (Struct_noun) ;
+
+multi_flow: flow |
+            (flow WS And WS flow ) |
+            (flow WS Comma WS multi_flow);
+
+flow : material|
+       ENERGY|
+       SIGNAL;
+
+material : SOLID|
+           LIQUID|
+           GAS;
+
 Struct_noun : [A-Z]+[_A-Z]*;
-comma : ',';
-and: 'and';
-end: '.';
-it: 'it';
-to: 'to';
-them: 'them';
-from: 'from';
-struct_verb: 'consists';
-energy_verb:'energizes'|'deenergizes';
-func_verb: 'contains'|'imports'|'exports'|'converts'|'transfers'|'receives'|'distributes'|'separates'|'couples'|'stores'|'supplies'|'connected';
-energy : 'thermal energy' | 'electrical energy' | 'mechanical energy' ;
-solid: 'ground coffee';
-liquid : 'water' | 'liquid coffee' | 'hot water';
-gas : 'steam';
+Comma : ',';
+And: 'and';
+End: '.';
+
+IT: 'it';
+
+TO: 'to';
+
+THEM: 'them';
+
+FROM: 'from';
+
+Struct_verb: 'consists';
+
+FUNC_VERB: 'contains'|'imports'|'exports'|'converts'|'transfers'|'receives'|'energizes'|'deenergizes'|'distributes'|'separates'|'couples'|'stores'|'supplies';
+
+ENERGY : 'thermal energy' | 'electrical energy' | 'mechanical energy'| 'heat' ;
+
+SOLID: 'ground coffee';
+
+LIQUID : 'water' | 'liquid coffee' | 'hot water';
+
+GAS : 'steam';
+
 SIGNAL : [a-zA-Z0-9_]+;
-WS : [ \t\r\n]+ -> skip;
+
+WS : [ \t\r\n]+;
+
+
+
+
+
+
+

@@ -55,7 +55,7 @@ Struct_verb: 'consists';
 
 FUNC_VERB: 'contains'|'imports'|'exports'|'converts'|'transfers'|'receives'|'energizes'|'deenergizes'|'distributes'|'separates'|'couples'|'stores'|'supplies';
 
-ENERGY : 'thermal energy' | 'electrical energy' | 'mechanical energy' ;
+ENERGY : 'thermal energy' | 'electrical energy' | 'mechanical energy'| 'heat' ;
 
 SOLID: 'ground coffee';
 

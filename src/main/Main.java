@@ -27,7 +27,11 @@ public class Main {
             TextToAADLParser parser = new TextToAADLParser(tokens);
             Visitor visitor = new Visitor();
             visitor.visit(parser.nlparch());
-
+            for(int i=0;i<=visitor.index-1;i++){
+//                System.out.println(visitor.system_names[i]);
+//                System.out.println(visitor.system_declaration[i][0]);
+//                System.out.println(visitor.system_declaration[i][1]);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

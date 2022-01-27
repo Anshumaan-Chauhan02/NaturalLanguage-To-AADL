@@ -1,1 +1,14 @@
-COFFEEMAKERconsistsPOTandBREWER
+COFFEEMAKER consists BREWER and POT.
+POT consists GLASSWARE , LID and HANDLE.
+BREWER consists TANK , HEATING_UNIT , BREWING_UNIT , VERTICAL_PIPE and DISPENSING_UNIT.
+HEATING_UNIT consists HEATING_COIL , HOT_WATER_PIPE and WATER_VALVE.
+HEATING_COIL imports electricity and converts it to heat.
+HEATING_COIL transfers heat to HOT_WATER_PIPE.
+HOT_WATER_PIPE imports water and heat and energizes to hot water.
+BREWING_UNIT consists SHOWER_HEAD , FILTER and FILTER_HOLDER.
+VERTICAL_PIPE transfers hot water from HOT_WATER_PIPE to SHOWER_HEAD.
+SHOWER_HEAD imports hot water from VERTICAL_PIPE.
+SHOWER_HEAD distributes hot water to FILTER.
+FILTER imports ground coffee , liquid coffee and hot water from SHOWER_HEAD.
+FILTER couples ground coffee and hot water.
+FILTER transfers liquid coffee to GLASSWARE.
