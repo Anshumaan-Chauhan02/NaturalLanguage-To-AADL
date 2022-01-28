@@ -1,6 +1,5 @@
 package main;
 import java.lang.*;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import lib.TextToAADLParser;
@@ -8,11 +7,10 @@ import lib.TextToAADLVisitor;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import javax.swing.*;
-
 
 public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements TextToAADLVisitor<Object> {
     String[] system_names =new String[20];
+    Integer[] sys_connection =new Integer[20];
     String[] created_systems =new String[20];
     String[][] system_declaration=new String[30][2];
     String[] system_subcomponents=new String [10];
@@ -25,6 +23,13 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
     int index_features=0;
     int index=0;
     int index_created=0;
+    Visitor()
+    {
+        for(int i=0;i<=19;i++)
+        {
+            sys_connection[i]=0;
+        }
+    }
     /**
      * Visit a parse tree produced by {@link TextToAADLParser#nlparch}.
      *
@@ -292,23 +297,26 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 flows[index_flows]=flows[index_flows]+sts+" ";
             }
         }
-        for(int i=0;i<=index_flows;i++)
-        { int count_within_token=0;
-            StringTokenizer flow_tokenize=new StringTokenizer(flows[i]);
-            while(flow_tokenize.hasMoreTokens())
-            {
+        for(int i=0;i<=index_flows;i++) {
+            int count_within_token = 0;
+            StringTokenizer flow_tokenize = new StringTokenizer(flows[i]);
+            while (flow_tokenize.hasMoreTokens()) {
 //                System.out.println(flow_tokenize.nextToken());
                 flow_tokenize.nextToken();
-                count_within_token+=1;
+                count_within_token += 1;
             }
-            String new_flow="";
+            String new_flow = "";
             flow_tokenize = new StringTokenizer(flows[i]);
-            if(count_within_token>1)
-            {   while(flow_tokenize.hasMoreTokens()) {
-                String x=flow_tokenize.nextToken();
-                new_flow = new_flow +x+ "_";
-            }
-            flows[i]=new_flow;
+            if (count_within_token > 1) {
+                while (flow_tokenize.hasMoreTokens()) {
+                    String x = flow_tokenize.nextToken();
+                    new_flow = new_flow + x + "_";
+                }
+                String new_flow_updated = "";
+                for (int s = 0; s <= new_flow.length() - 2; s++) {
+                    new_flow_updated = new_flow_updated + new_flow.charAt(s);
+                }
+                flows[i] = new_flow_updated;
             }
         }
         Iterator<TerminalNode> number_of_stnoun=ctx.Struct_noun().iterator();
@@ -316,7 +324,7 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
         String newString="";
         int index_number=0;
         while(number_of_stnoun.hasNext()) {
-            String token= number_of_stnoun.next().toString();
+            String token = number_of_stnoun.next().toString();
 
             number_of_sn += 1;
 
@@ -404,11 +412,83 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                         int index_portnames=0;
                         boolean already_in_ports=false;
                         for(int j=0;j<=number_of_in_ports[0]-1;j++) {
-                            newdecl=newdecl+"\n\t\t"+flows[j]+": in data port;";
+                            for (int k=0;k<=index_ports-1;k++) {
+                                StringTokenizer stp=new StringTokenizer(portnames[k]);
+                                String port_comp=stp.nextToken();
+                                if(port_comp.equals(system_names[ind]))
+                                {
+                                    already_in_ports=true;
+                                    index_portnames=k;
+                                }
+                            }
+                            if (already_in_ports) {
+
+                                StringTokenizer stp=new StringTokenizer(portnames[index_portnames]);
+                                stp.nextToken();
+                                boolean if_named_port=false;
+                                while(stp.hasMoreTokens())
+                                {
+                                    String portname_current=stp.nextToken();
+                                    if(flows[j].equals(portname_current))
+                                    {
+                                        if_named_port=true;
+                                    }
+                                }
+                                if(if_named_port)
+                                {
+                                    newdecl = newdecl + "\n\t\t" + flows[j]+"_from_outside"+ ": in data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_from_outside";
+                                }
+                                else {
+                                    newdecl = newdecl + "\n\t\t" + flows[j] + ": in data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j];
+                                }
+
+                            } else {
+                                portnames[index_ports]=system_names[ind]+" "+flows[j];
+                                index_ports+=1;
+                                newdecl = newdecl + "\n\t\t" + flows[j] + ": in data port;";
+                            }
                         }
                         for(int j=0;j<=number_of_out_ports[0]-1;j++)
                         {
-                            newdecl=newdecl+"\n\t\t"+flows[j]+": out data port;";
+                            for (int k=0;k<=index_ports-1;k++) {
+                                StringTokenizer stp=new StringTokenizer(portnames[k]);
+                                String port_comp=stp.nextToken();
+                                if(port_comp.equals(system_names[ind]))
+                                {
+                                    already_in_ports=true;
+                                    index_portnames=k;
+                                }
+                            }
+                            if (already_in_ports) {
+
+                                StringTokenizer stp=new StringTokenizer(portnames[index_portnames]);
+                                stp.nextToken();
+                                boolean if_named_port=false;
+                                while(stp.hasMoreTokens())
+                                {
+                                    String portname_current=stp.nextToken();
+                                    if(flows[j].equals(portname_current))
+                                    {
+                                        if_named_port=true;
+                                    }
+                                }
+                                if(if_named_port)
+                                {
+                                    newdecl = newdecl + "\n\t\t" + flows[j]+"_to_outside"+ ": out data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_to_outside";
+                                }
+                                else {
+                                    newdecl = newdecl + "\n\t\t" + flows[j] + ": out data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j];
+                                }
+
+                            } else {
+                                portnames[index_ports]=system_names[ind]+" "+flows[j];
+                                index_ports+=1;
+                                newdecl = newdecl + "\n\t\t" + flows[j] + ": out data port;";
+                            }
                         }
                         newline_var=false;
                     }
@@ -425,6 +505,8 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             }
 
             Iterator<TerminalNode> stuct_nouns_used=ctx.Struct_noun().iterator();
+            Iterator<TerminalNode> for_start=ctx.Struct_noun().iterator();
+            String start=for_start.next().getText();
             int struct_val=0;
             while(stuct_nouns_used.hasNext())
             {
@@ -449,13 +531,88 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                     if((var_count_newline==2)&&(newline_var))
                     {
                         newline_var=true;
+                        int index_portnames=0;
+                        boolean already_in_ports=false;
                         for(int j=0;j<=number_of_in_ports[struct_val]-1;j++)
                         {
-                            newdecl=newdecl+"\n\t\t"+flows[j]+": in data port;";
+                            for (int k=0;k<=index_ports-1;k++) {
+                                StringTokenizer stp=new StringTokenizer(portnames[k]);
+                                String port_comp=stp.nextToken();
+                                if(port_comp.equals(system_names[ind]))
+                                {
+                                    already_in_ports=true;
+                                    index_portnames=k;
+                                }
+                            }
+                            if (already_in_ports) {
+
+                                StringTokenizer stp=new StringTokenizer(portnames[index_portnames]);
+                                stp.nextToken();
+                                boolean if_named_port=false;
+                                while(stp.hasMoreTokens())
+                                {
+                                    String portname_current=stp.nextToken();
+                                    if(flows[j].equals(portname_current))
+                                    {
+                                        if_named_port=true;
+                                    }
+                                }
+                                if(if_named_port)
+                                {
+                                    String temp=stuct_nouns_used.next().getText();
+                                    newdecl = newdecl + "\n\t\t" + flows[j]+"_from_"+temp+ ": in data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_from_"+temp;
+                                }
+                                else {
+                                    newdecl = newdecl + "\n\t\t" + flows[j] + ": in data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j];
+                                }
+
+                            } else {
+                                portnames[index_ports]=system_names[ind]+" "+flows[j];
+                                index_ports+=1;
+                                newdecl = newdecl + "\n\t\t" + flows[j] + ": in data port;";
+                            }
                         }
                         for(int j=0;j<=number_of_out_ports[struct_val]-1;j++)
                         {
-                            newdecl=newdecl+"\n\t\t"+flows[j]+": out data port;";
+                            for (int k=0;k<=index_ports-1;k++) {
+                                StringTokenizer stp=new StringTokenizer(portnames[k]);
+                                String port_comp=stp.nextToken();
+                                if(port_comp.equals(system_names[ind]))
+                                {
+                                    already_in_ports=true;
+                                    index_portnames=k;
+                                }
+                            }
+                            if (already_in_ports) {
+
+                                StringTokenizer stp=new StringTokenizer(portnames[index_portnames]);
+                                stp.nextToken();
+                                boolean if_named_port=false;
+                                while(stp.hasMoreTokens())
+                                {
+                                    String portname_current=stp.nextToken();
+                                    if(flows[j].equals(portname_current))
+                                    {
+                                        if_named_port=true;
+                                    }
+                                }
+                                if(if_named_port)
+                                {
+                                    newdecl = newdecl + "\n\t\t" + flows[j]+"_to_"+start+ ": out data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_to_"+start;
+                                }
+                                else {
+                                    newdecl = newdecl + "\n\t\t" + flows[j] + ": out data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j];
+                                }
+
+                            } else {
+                                portnames[index_ports]=system_names[ind]+" "+flows[j];
+                                index_ports+=1;
+                                newdecl = newdecl + "\n\t\t" + flows[j] + ": out data port;";
+                            }
                         }
                         newline_var=false;
                     }
@@ -479,6 +636,8 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             for(int i=0;i<=index_subcomponents-1;i++) {
                 StringTokenizer list_of_sub = new StringTokenizer(system_subcomponents[i]);
                 comp = list_of_sub.nextToken();
+                check_sub[0]=false;
+                check_sub[1]=false;
                 while (list_of_sub.hasMoreTokens()) {
                     String token = list_of_sub.nextToken();
                     if (token.equals(stn[0])) {
@@ -531,13 +690,75 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 }
                 if(already_connections)
                 {
+                    Iterator<TerminalNode> tostore= ctx.Struct_noun().iterator();
+                    String tostorestn[]=new String[2];
+                    tostorestn[0]=tostore.next().getText();
+                    tostorestn[1]=tostore.next().getText();
+                    String startport="";
+                    String endport="";
+                    for(int v=0;v<=index_ports-1;v++)
+                    {
+                        StringTokenizer start_comp=new StringTokenizer(portnames[v]);
+                        String start_node=start_comp.nextToken();
+                        if(start_node.equals(tostorestn[0]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                endport=start_comp.nextToken();
+                            }
+                        }
+                        if(start_node.equals(tostorestn[1]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                startport=start_comp.nextToken();
+                            }
+                        }
+                    }
+                    for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                        if (i == char_to_replace) {
 
+                            sys_connection[ind_c]=sys_connection[ind_c]+1;
+                            newdec= newdec+"\n\t\t"+system_names[ind_c]+sys_connection[ind_c]+": port this_"+tostorestn[1]+"."+startport+"->"+"this_"+tostorestn[0]+"."+endport+";\n";
+
+                        } else {
+                            newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                        }
+                    }
+                    system_declaration[ind_c][1] = newdec;
                 }
                 else {
+                    Iterator<TerminalNode> tostore= ctx.Struct_noun().iterator();
+                    String tostorestn[]=new String[2];
+                    tostorestn[0]=tostore.next().getText();
+                    tostorestn[1]=tostore.next().getText();
+                    String startport="";
+                    String endport="";
+                    for(int v=0;v<=index_ports-1;v++)
+                    {
+                        StringTokenizer start_comp=new StringTokenizer(portnames[v]);
+                        String start_node=start_comp.nextToken();
+                                if(start_node.equals(tostorestn[0]))
+                                {
+                                    while(start_comp.hasMoreTokens())
+                                    {
+                                        endport=start_comp.nextToken();
+                                    }
+                                }
+                    if(start_node.equals(tostorestn[1]))
+                    {
+                        while(start_comp.hasMoreTokens())
+                        {
+                            startport=start_comp.nextToken();
+                        }
+                    }
+                    }
                     for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
                         if (i == char_to_replace) {
 
                             newdec = newdec + "\n\tconnections\n";
+                            sys_connection[ind_c]=1;
+                            newdec= newdec+"\t\t"+system_names[ind_c]+sys_connection[ind_c]+": port this_"+tostorestn[1]+"."+startport+"->"+"this_"+tostorestn[0]+"."+endport+";\n";
 
                         } else {
                             newdec = newdec + system_declaration[ind_c][1].charAt(i);
@@ -561,6 +782,8 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             }
 
             Iterator<TerminalNode> stuct_nouns_used=ctx.Struct_noun().iterator();
+            Iterator<TerminalNode> for_start=ctx.Struct_noun().iterator();
+            String start=for_start.next().getText();
             int struct_val=0;
             while(stuct_nouns_used.hasNext())
             {
@@ -585,13 +808,88 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                     if((var_count_newline==2)&&(newline_var))
                     {
                         newline_var=true;
+                        int index_portnames=0;
+                        boolean already_in_ports=false;
                         for(int j=0;j<=number_of_in_ports[struct_val]-1;j++)
                         {
-                            newdecl=newdecl+"\n\t\t"+flows[j]+": in data port;";
+                            for (int k=0;k<=index_ports-1;k++) {
+                                StringTokenizer stp=new StringTokenizer(portnames[k]);
+                                String port_comp=stp.nextToken();
+                                if(port_comp.equals(system_names[ind]))
+                                {
+                                    already_in_ports=true;
+                                    index_portnames=k;
+                                }
+                            }
+                            if (already_in_ports) {
+
+                                StringTokenizer stp=new StringTokenizer(portnames[index_portnames]);
+                                stp.nextToken();
+                                boolean if_named_port=false;
+                                while(stp.hasMoreTokens())
+                                {
+                                    String portname_current=stp.nextToken();
+                                    if(flows[j].equals(portname_current))
+                                    {
+                                        if_named_port=true;
+                                    }
+                                }
+                                if(if_named_port)
+                                {
+                                    newdecl = newdecl + "\n\t\t" + flows[j]+"_from_"+start+": in data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_from_"+start;
+                                }
+                                else {
+                                    newdecl = newdecl + "\n\t\t" + flows[j] + ": in data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j];
+                                }
+
+                            } else {
+                                portnames[index_ports]=system_names[ind]+" "+flows[j];
+                                index_ports+=1;
+                                newdecl = newdecl + "\n\t\t" + flows[j] + ": in data port;";
+                            }
                         }
                         for(int j=0;j<=number_of_out_ports[struct_val]-1;j++)
                         {
-                            newdecl=newdecl+"\n\t\t"+flows[j]+": out data port;";
+                            for (int k=0;k<=index_ports-1;k++) {
+                                StringTokenizer stp=new StringTokenizer(portnames[k]);
+                                String port_comp=stp.nextToken();
+                                if(port_comp.equals(system_names[ind]))
+                                {
+                                    already_in_ports=true;
+                                    index_portnames=k;
+                                }
+                            }
+                            if (already_in_ports) {
+
+                                StringTokenizer stp=new StringTokenizer(portnames[index_portnames]);
+                                stp.nextToken();
+                                boolean if_named_port=false;
+                                while(stp.hasMoreTokens())
+                                {
+                                    String portname_current=stp.nextToken();
+                                    if(flows[j].equals(portname_current))
+                                    {
+                                        if_named_port=true;
+                                    }
+                                }
+                                if(if_named_port)
+                                {
+                                    String temp=stuct_nouns_used.next().getText();
+                                    newdecl = newdecl + "\n\t\t" + flows[j]+"_to_"+ temp+": out data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_to_"+ temp;
+                                }
+                                else {
+                                    newdecl = newdecl + "\n\t\t" + flows[j] + ": out data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j];
+                                }
+
+                            } else {
+                                portnames[index_ports]=system_names[ind]+" "+flows[j];
+                                index_ports+=1;
+                                newdecl = newdecl + "\n\t\t" + flows[j] + ": out data port;";
+                            }
                         }
                         newline_var=false;
                     }
@@ -613,6 +911,8 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             boolean all_in_c = false;
             String comp="";
             for(int i=0;i<=index_subcomponents-1;i++) {
+                check_sub[0]=false;
+                check_sub[1]=false;
                 StringTokenizer list_of_sub = new StringTokenizer(system_subcomponents[i]);
                 comp = list_of_sub.nextToken();
                 while (list_of_sub.hasMoreTokens()) {
@@ -667,13 +967,76 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 }
                 if(already_connections)
                 {
+                    Iterator<TerminalNode> tostore= ctx.Struct_noun().iterator();
+                    String tostorestn[]=new String[2];
+                    tostorestn[0]=tostore.next().getText();
+                    tostorestn[1]=tostore.next().getText();
+                    String startport="";
+                    String endport="";
+                    for(int v=0;v<=index_ports-1;v++)
+                    {
+                        StringTokenizer start_comp=new StringTokenizer(portnames[v]);
+                        String start_node=start_comp.nextToken();
+                        if(start_node.equals(tostorestn[0]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                startport=start_comp.nextToken();
+                            }
+                        }
+                        if(start_node.equals(tostorestn[1]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                endport=start_comp.nextToken();
+                            }
+                        }
+                    }
+                    for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                        if (i == char_to_replace) {
 
+                            sys_connection[ind_c]=sys_connection[ind_c]+1;
+                            newdec= newdec+"\n\t\t"+system_names[ind_c]+sys_connection[ind_c]+": port this_"+tostorestn[0]+"."+startport+"->"+"this_"+tostorestn[1]+"."+endport+";\n";
+
+                        } else {
+                            newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                        }
+                    }
+                    system_declaration[ind_c][1] = newdec;
                 }
                 else {
+
+                    Iterator<TerminalNode> tostore= ctx.Struct_noun().iterator();
+                    String tostorestn[]=new String[2];
+                    tostorestn[0]=tostore.next().getText();
+                    tostorestn[1]=tostore.next().getText();
+                    String startport="";
+                    String endport="";
+                    for(int v=0;v<=index_ports-1;v++)
+                    {
+                        StringTokenizer start_comp=new StringTokenizer(portnames[v]);
+                        String start_node=start_comp.nextToken();
+                        if(start_node.equals(tostorestn[0]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                startport=start_comp.nextToken();
+                            }
+                        }
+                        if(start_node.equals(tostorestn[1]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                endport=start_comp.nextToken();
+                            }
+                        }
+                    }
                     for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
                         if (i == char_to_replace) {
 
                             newdec = newdec + "\n\tconnections\n";
+                            sys_connection[ind_c]=1;
+                            newdec= newdec+"\t\t"+system_names[ind_c]+sys_connection[ind_c]+": port this_"+tostorestn[0]+"."+startport+"->"+"this_"+tostorestn[1]+"."+endport+";\n";
 
                         } else {
                             newdec = newdec + system_declaration[ind_c][1].charAt(i);
@@ -696,9 +1059,14 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             }
 
             Iterator<TerminalNode> stuct_nouns_used=ctx.Struct_noun().iterator();
+            Iterator<TerminalNode> for_start=ctx.Struct_noun().iterator();
+            String start=for_start.next().getText();
+            String second=for_start.next().getText();
+            String last=for_start.next().getText();
+            int flow_going=-1;
             int struct_val=0;
             while(stuct_nouns_used.hasNext())
-            {
+            {   flow_going+=1;
                 int ind=0;
                 String t=stuct_nouns_used.next().getText();
                 for(int i=0;i<=index-1;i++)
@@ -720,13 +1088,106 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                     if((var_count_newline==2)&&(newline_var))
                     {
                         newline_var=true;
+                        int index_portnames=0;
+                        boolean already_in_ports=false;
                         for(int j=0;j<=number_of_in_ports[struct_val]-1;j++)
                         {
-                            newdecl=newdecl+"\n\t\t"+flows[j]+": in data port;";
+                            for (int k=0;k<=index_ports-1;k++) {
+                                StringTokenizer stp=new StringTokenizer(portnames[k]);
+                                String port_comp=stp.nextToken();
+                                if(port_comp.equals(system_names[ind]))
+                                {
+                                    already_in_ports=true;
+                                    index_portnames=k;
+                                }
+                            }
+                            if (already_in_ports) {
+
+                                StringTokenizer stp=new StringTokenizer(portnames[index_portnames]);
+                                stp.nextToken();
+                                boolean if_named_port=false;
+                                while(stp.hasMoreTokens())
+                                {
+                                    String portname_current=stp.nextToken();
+                                    if(flows[j].equals(portname_current))
+                                    {
+                                        if_named_port=true;
+                                    }
+                                }
+                                if(if_named_port)
+                                {
+                                    if(flow_going==0)
+                                    {
+                                        newdecl = newdecl + "\n\t\t" + flows[j]+"_from_"+second+ ": in data port;";
+                                        portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_from_"+second;
+                                    }
+
+                                    if(flow_going==2)
+                                    {
+                                        newdecl = newdecl + "\n\t\t" + flows[j]+"_from_"+start+ ": in data port;";
+                                        portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_from_"+start;
+                                    }
+
+                                }
+                                else {
+                                    newdecl = newdecl + "\n\t\t" + flows[j] + ": in data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j];
+                                }
+
+                            } else {
+                                portnames[index_ports]=system_names[ind]+" "+flows[j];
+                                index_ports+=1;
+                                newdecl = newdecl + "\n\t\t" + flows[j] + ": in data port;";
+                            }
                         }
                         for(int j=0;j<=number_of_out_ports[struct_val]-1;j++)
                         {
-                            newdecl=newdecl+"\n\t\t"+flows[j]+": out data port;";
+                            for (int k=0;k<=index_ports-1;k++) {
+                                StringTokenizer stp=new StringTokenizer(portnames[k]);
+                                String port_comp=stp.nextToken();
+                                if(port_comp.equals(system_names[ind]))
+                                {
+                                    already_in_ports=true;
+                                    index_portnames=k;
+                                }
+                            }
+                            if (already_in_ports) {
+
+                                StringTokenizer stp=new StringTokenizer(portnames[index_portnames]);
+                                stp.nextToken();
+                                boolean if_named_port=false;
+                                while(stp.hasMoreTokens())
+                                {
+                                    String portname_current=stp.nextToken();
+                                    if(flows[j].equals(portname_current))
+                                    {
+                                        if_named_port=true;
+                                    }
+                                }
+                                if(if_named_port)
+                                {
+                                    if(flow_going==0)
+                                    {
+                                        newdecl = newdecl + "\n\t\t" + flows[j]+"_to_"+last+ ": out data port;";
+                                        portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_to_"+last;
+                                    }
+                                    if(flow_going==1)
+                                    {
+                                        newdecl = newdecl + "\n\t\t" + flows[j]+"_to_"+start+ ": out data port;";
+                                        portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_to_"+start;
+                                    }
+
+                                }
+                                else {
+                                    newdecl = newdecl + "\n\t\t" + flows[j] + ": out data port;";
+                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j];
+                                }
+
+                            } else {
+                                portnames[index_ports]=system_names[ind]+" "+flows[j];
+                                index_ports+=1;
+                                newdecl = newdecl + "\n\t\t" + flows[j] + ": out data port;";
+                            }
                         }
                         newline_var=false;
                     }
@@ -754,6 +1215,10 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             String comp="";
             String comp2="";
             for(int i=0;i<=index_subcomponents-1;i++) {
+                check_sub[0]=false;
+                check_sub[1]=false;
+                check_sub_2[0]=false;
+                check_sub_2[1]=false;
                 StringTokenizer list_of_sub = new StringTokenizer(system_subcomponents[i]);
                 StringTokenizer list_of_sub_2 = new StringTokenizer(system_subcomponents[i]);
                 comp = list_of_sub.nextToken();
