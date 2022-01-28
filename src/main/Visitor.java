@@ -8,11 +8,17 @@ import lib.TextToAADLVisitor;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import javax.swing.*;
+
 
 public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements TextToAADLVisitor<Object> {
     String[] system_names =new String[20];
     String[] created_systems =new String[20];
     String[][] system_declaration=new String[30][2];
+    String[] system_subcomponents=new String [10];
+    int index_subcomponents=0;
+    String[] connections=new String[10];
+    int index_connections=0;
     String[] sys_features=new String[20];
     int index_features=0;
     int index=0;
@@ -184,7 +190,15 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                         char nl='\n';
                         if((system_declaration[i][1].charAt(l)==nl)&&(!var_sub))
                         {
+
                             newString=system_declaration[i][1].charAt(l)+newString+subcomponents_generation(new_args);
+                            String list_of_subc="";
+                            for(int m=0;m<=new_args.length-1;m++)
+                            {
+                                list_of_subc=list_of_subc+" "+new_args[m];
+                            }
+                            system_subcomponents[index_subcomponents]=system_names[i]+list_of_subc;
+                            index_subcomponents+=1;
                             var_sub=true;
 
                         }
@@ -258,10 +272,6 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             {
                 flows[index_flows]=flows[index_flows]+sts+" ";
             }
-        }
-        for(int i=0;i<=index_flows;i++)
-        {
-            System.out.println(flows[i]);
         }
         Iterator<TerminalNode> number_of_stnoun=ctx.Struct_noun().iterator();
         int number_of_sn=0;
@@ -355,11 +365,11 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                         newline_var=true;
                         for(int j=0;j<=number_of_in_ports[0]-1;j++)
                         {
-                            newdecl=newdecl+"\n\t\t      : in data port;";
+                            newdecl=newdecl+"\n\t\t"+flows[j]+": in data port;";
                         }
                         for(int j=0;j<=number_of_out_ports[0]-1;j++)
                         {
-                            newdecl=newdecl+"\n\t\t      : out data port;";
+                            newdecl=newdecl+"\n\t\t"+flows[j]+": out data port;";
                         }
                         newline_var=false;
                     }
@@ -415,7 +425,94 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 system_declaration[ind][0]=newdecl;
                 struct_val+=1;
             }
+            stuct_nouns_used=ctx.Struct_noun().iterator();
+            boolean[] check_sub=new boolean[2];
+            String[] stn=new String[2];
+            while (stuct_nouns_used.hasNext())
+
+                for(int i=0;i<=1;i++)
+                {
+                    stn[i]=stuct_nouns_used.next().getText();
+                    check_sub[i]=false;
+                }
+            boolean all_in_c = false;
+            String comp="";
+            for(int i=0;i<=index_subcomponents-1;i++) {
+                StringTokenizer list_of_sub = new StringTokenizer(system_subcomponents[i]);
+                comp = list_of_sub.nextToken();
+                while (list_of_sub.hasMoreTokens()) {
+                    String token = list_of_sub.nextToken();
+                    if (token.equals(stn[0])) {
+                        check_sub[0] = true;
+                    }
+                    if (token.equals(stn[1])) {
+                        check_sub[1] = true;
+                    }
+                    if (check_sub[0] && check_sub[1]) {
+                        all_in_c = true;
+                    }
+                }
             }
+                if(all_in_c) {
+                    int ind_c = 0;
+                    for (int k = 0; k <= system_names.length - 1; k++) {
+
+                    if (comp.equals(system_names[k])) {
+                       ind_c=k;
+                    }
+                }
+                    String newdec="";
+                    boolean newlinevar=false;
+                    int newlvar=0;
+                    int char_to_replace=0;
+                            for (int m = system_declaration[ind_c][1].length() - 1; m >=0 ; m--) {
+                                if ((system_declaration[ind_c][1].charAt(m) == '\n') &&(newlinevar))
+                                {
+                                    char_to_replace=m;
+                                    newlinevar=false;
+                                    break;
+
+                                }
+                                if(system_declaration[ind_c][1].charAt(m) == '\n')
+                                {
+                                    newlvar+=1;
+                                    if(newlvar==1)
+                                    {
+                                        newlinevar=true;
+                                    }
+                                }
+                            }
+                            boolean already_connections=false;
+                            for(int y=0;y<=index_connections-1;y++)
+                            {
+                                if(system_names[ind_c].equals(connections[y]))
+                                {
+                                    already_connections=true;
+                                }
+                            }
+                            if(already_connections)
+                            {
+
+                            }
+                            else {
+                                for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                                    if (i == char_to_replace) {
+
+                                        newdec = newdec + "\n\tconnections\n";
+
+                                    } else {
+                                        newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                                    }
+                                }
+                                system_declaration[ind_c][1] = newdec;
+                                connections[index_connections] = system_names[ind_c];
+                                index_connections += 1;
+                            }
+                    }
+                }
+
+
+
 
         else if((number_of_sn==2)&&(!(ctx.TO()==null)))
         {
@@ -463,6 +560,90 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 }
                 system_declaration[ind][0]=newdecl;
                 struct_val+=1;
+            }
+            stuct_nouns_used=ctx.Struct_noun().iterator();
+            boolean[] check_sub=new boolean[2];
+            String[] stn=new String[2];
+            while (stuct_nouns_used.hasNext())
+
+                for(int i=0;i<=1;i++)
+                {
+                    stn[i]=stuct_nouns_used.next().getText();
+                    check_sub[i]=false;
+                }
+            boolean all_in_c = false;
+            String comp="";
+            for(int i=0;i<=index_subcomponents-1;i++) {
+                StringTokenizer list_of_sub = new StringTokenizer(system_subcomponents[i]);
+                comp = list_of_sub.nextToken();
+                while (list_of_sub.hasMoreTokens()) {
+                    String token = list_of_sub.nextToken();
+                    if (token.equals(stn[0])) {
+                        check_sub[0] = true;
+                    }
+                    if (token.equals(stn[1])) {
+                        check_sub[1] = true;
+                    }
+                    if (check_sub[0] && check_sub[1]) {
+                        all_in_c = true;
+                    }
+                }
+            }
+            if(all_in_c) {
+                int ind_c = 0;
+                for (int k = 0; k <= system_names.length - 1; k++) {
+
+                    if (comp.equals(system_names[k])) {
+                        ind_c=k;
+                    }
+                }
+                String newdec="";
+                boolean newlinevar=false;
+                int newlvar=0;
+                int char_to_replace=0;
+                for (int m = system_declaration[ind_c][1].length() - 1; m >=0 ; m--) {
+                    if ((system_declaration[ind_c][1].charAt(m) == '\n') &&(newlinevar))
+                    {
+                        char_to_replace=m;
+                        newlinevar=false;
+                        break;
+
+                    }
+                    if(system_declaration[ind_c][1].charAt(m) == '\n')
+                    {
+                        newlvar+=1;
+                        if(newlvar==1)
+                        {
+                            newlinevar=true;
+                        }
+                    }
+                }
+                boolean already_connections=false;
+                for(int y=0;y<=index_connections-1;y++)
+                {
+                    if(system_names[ind_c].equals(connections[y]))
+                    {
+                        already_connections=true;
+                    }
+                }
+                if(already_connections)
+                {
+
+                }
+                else {
+                    for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                        if (i == char_to_replace) {
+
+                            newdec = newdec + "\n\tconnections\n";
+
+                        } else {
+                            newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                        }
+                    }
+                    system_declaration[ind_c][1] = newdec;
+                    connections[index_connections] = system_names[ind_c];
+                    index_connections += 1;
+                }
             }
         }
 
