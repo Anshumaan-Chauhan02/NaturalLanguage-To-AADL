@@ -16,6 +16,8 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
     String[] created_systems =new String[20];
     String[][] system_declaration=new String[30][2];
     String[] system_subcomponents=new String [10];
+    String[] portnames=new String[10];
+    int index_ports=0;
     int index_subcomponents=0;
     String[] connections=new String[10];
     int index_connections=0;
@@ -107,13 +109,13 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             }
             else {
 
-                    for (int i = 0; i <= index - 1; i++) {
+                for (int i = 0; i <= index - 1; i++) {
 
-                        if (token_name.equals(system_names[i])) {
-                            var = true;
-                        }
-
+                    if (token_name.equals(system_names[i])) {
+                        var = true;
                     }
+
+                }
                 if (var == false) {
                     system_names[index] = token_name;
                     index = index + 1;
@@ -151,65 +153,82 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
 
             }
         }
-                    for(int i=0;i<=index-1;i++) {
-                        String newString="";
-                        boolean check_sub=false;
-                        String n_c="";
-                        for (int m = 0; m <= index_consists - 1; m++) {
-                            if (system_names[i].equals(system_consists[m])) {
-                                check_sub = true;
-                                n_c = system_consists[m];
-                            }
-                        }
+        for(int i=0;i<=index-1;i++) {
+            String newString="";
+            boolean check_sub=false;
+            String n_c="";
+            for (int m = 0; m <= index_consists - 1; m++) {
+                if (system_names[i].equals(system_consists[m])) {
+                    check_sub = true;
+                    n_c = system_consists[m];
+                }
+            }
 
 
-                String args[]= new String[10];
-                        int index_args=0;
-                    if(check_sub==true)
-                    { while(st2.hasMoreTokens()) {
-                        String text=st2.nextToken();
+            String args[]= new String[10];
+            int index_args=0;
+            if(check_sub==true)
+            { while(st2.hasMoreTokens()) {
+                String text=st2.nextToken();
 
-                        if((text.equals(n_c))||(text.equals("consists"))||(text.equals("\n"))||(text.equals("and"))||(text.equals(null)))
+                if((text.equals(n_c))||(text.equals("consists"))||(text.equals("\n"))||(text.equals("and"))||(text.equals(null)))
+                {
+                    continue;
+                }
+                else
+                {
+                    args[index_args]=text;
+                    index_args=index_args+1;
+                }
+            }
+                String[] new_args=new String[index_args];
+                for(int b=0;b<=index_args-1;b++)
+                {
+                    new_args[b]=args[b];
+                }
+                boolean var_sub=false;
+                for(int l=0;l<=system_declaration[i][1].length()-1;l++)
+                {
+                    char nl='\n';
+                    if((system_declaration[i][1].charAt(l)==nl)&&(!var_sub))
+                    {
+
+                        newString=system_declaration[i][1].charAt(l)+newString+subcomponents_generation(new_args);
+                        String list_of_subc="";
+                        for(int m=0;m<=new_args.length-1;m++)
                         {
-                            continue;
+                            list_of_subc=list_of_subc+" "+new_args[m];
+                        }
+                        boolean in_subcom=false;
+                        int ind_in_subcomp=0;
+                        for(int a=0;a<=index_subcomponents-1;a++) {
+                        StringTokenizer stsub=new StringTokenizer(system_subcomponents[a]);
+                        String stmain= stsub.nextToken();
+                        if(system_names[i].equals(stmain))
+                        {
+                            in_subcom=true;
+                            ind_in_subcomp=a;
+                        }
+                        }
+                        if(!in_subcom) {
+                            system_subcomponents[index_subcomponents] = system_names[i] + list_of_subc;
+                            index_subcomponents += 1;
+                            var_sub = true;
                         }
                         else
                         {
-                            args[index_args]=text;
-                            index_args=index_args+1;
+                            system_subcomponents[ind_in_subcomp] = system_subcomponents[ind_in_subcomp] + list_of_subc;
                         }
-                    }
-                    String[] new_args=new String[index_args];
-                    for(int b=0;b<=index_args-1;b++)
-                    {
-                       new_args[b]=args[b];
-                    }
-                    boolean var_sub=false;
-                    for(int l=0;l<=system_declaration[i][1].length()-1;l++)
-                    {
-                        char nl='\n';
-                        if((system_declaration[i][1].charAt(l)==nl)&&(!var_sub))
-                        {
 
-                            newString=system_declaration[i][1].charAt(l)+newString+subcomponents_generation(new_args);
-                            String list_of_subc="";
-                            for(int m=0;m<=new_args.length-1;m++)
-                            {
-                                list_of_subc=list_of_subc+" "+new_args[m];
-                            }
-                            system_subcomponents[index_subcomponents]=system_names[i]+list_of_subc;
-                            index_subcomponents+=1;
-                            var_sub=true;
-
-                        }
-                        else {
-                            newString = newString + system_declaration[i][1].charAt(l);
-                        }
                     }
-                        system_declaration[i][1]=newString;
+                    else {
+                        newString = newString + system_declaration[i][1].charAt(l);
+                    }
                 }
-
+                system_declaration[i][1]=newString;
             }
+
+        }
         return null;
     }
 
@@ -273,47 +292,66 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 flows[index_flows]=flows[index_flows]+sts+" ";
             }
         }
+        for(int i=0;i<=index_flows;i++)
+        { int count_within_token=0;
+            StringTokenizer flow_tokenize=new StringTokenizer(flows[i]);
+            while(flow_tokenize.hasMoreTokens())
+            {
+//                System.out.println(flow_tokenize.nextToken());
+                flow_tokenize.nextToken();
+                count_within_token+=1;
+            }
+            String new_flow="";
+            flow_tokenize = new StringTokenizer(flows[i]);
+            if(count_within_token>1)
+            {   while(flow_tokenize.hasMoreTokens()) {
+                String x=flow_tokenize.nextToken();
+                new_flow = new_flow +x+ "_";
+            }
+            flows[i]=new_flow;
+            }
+        }
         Iterator<TerminalNode> number_of_stnoun=ctx.Struct_noun().iterator();
         int number_of_sn=0;
         String newString="";
         int index_number=0;
         while(number_of_stnoun.hasNext()) {
-           String token= number_of_stnoun.next().toString();
+            String token= number_of_stnoun.next().toString();
 
             number_of_sn += 1;
 
-                boolean in_sys_features = false;
-                for (int i = 0; i <= index_features - 1; i++) {
+            boolean in_sys_features = false;
+            for (int i = 0; i <= index_features - 1; i++) {
 
-                    if (token.equals(sys_features[i])) {
+                if (token.equals(sys_features[i])) {
 
-                        in_sys_features = true;
-                        break;
-                    }
+                    in_sys_features = true;
+                    break;
                 }
-                if (!in_sys_features) {
-                    for (int j = 0; j <= index - 1; j++) {
-                        if (token.equals(system_names[j])) {
-                            index_number = j;
-                        }
-                    }
-                    boolean newline_var = false;
-                    for (int k = 0; k <= system_declaration[index_number][0].length() - 1; k++) {
-                        if ((system_declaration[index_number][0].charAt(k) == '\n') && (!newline_var)) {
-                            newString = newString + "\n\tfeatures\n";
-                            newline_var = true;
-                            sys_features[index_features] = system_names[index_number];
-                            index_features += 1;
-                        } else {
-                            newString = newString + system_declaration[index_number][0].charAt(k);
-                        }
-                    }
-                    system_declaration[index_number][0] = newString;
-                    newString = "";
-                }
-
             }
-            //Now features has been added now, we add ports
+            if (!in_sys_features) {
+                for (int j = 0; j <= index - 1; j++) {
+                    if (token.equals(system_names[j])) {
+                        index_number = j;
+                    }
+                }
+                boolean newline_var = false;
+                for (int k = 0; k <= system_declaration[index_number][0].length() - 1; k++) {
+                    if ((system_declaration[index_number][0].charAt(k) == '\n') && (!newline_var)) {
+                        newString = newString + "\n\tfeatures\n";
+                        newline_var = true;
+                        sys_features[index_features] = system_names[index_number];
+                        index_features += 1;
+                    } else {
+                        newString = newString + system_declaration[index_number][0].charAt(k);
+                    }
+                }
+                system_declaration[index_number][0] = newString;
+                newString = "";
+            }
+
+        }
+        //Now features has been added now, we add ports
 //        System.out.println(ctx.FUNC_VERB());
         Iterator<TerminalNode> funcverbs= ctx.FUNC_VERB().iterator();
         String func_verb_used="";
@@ -336,7 +374,7 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
         if(number_of_sn==1)
         {
             if(func_verb_used.equals("imports"))
-            number_of_in_ports[0]=index_flows+1;
+                number_of_in_ports[0]=index_flows+1;
             if(func_verb_used.equals("transfers"))
                 number_of_out_ports[0]=index_flows+1;
 
@@ -363,8 +401,9 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                     if((var_count_newline==2)&&(newline_var))
                     {
                         newline_var=true;
-                        for(int j=0;j<=number_of_in_ports[0]-1;j++)
-                        {
+                        int index_portnames=0;
+                        boolean already_in_ports=false;
+                        for(int j=0;j<=number_of_in_ports[0]-1;j++) {
                             newdecl=newdecl+"\n\t\t"+flows[j]+": in data port;";
                         }
                         for(int j=0;j<=number_of_out_ports[0]-1;j++)
@@ -453,63 +492,63 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                     }
                 }
             }
-                if(all_in_c) {
-                    int ind_c = 0;
-                    for (int k = 0; k <= system_names.length - 1; k++) {
+            if(all_in_c) {
+                int ind_c = 0;
+                for (int k = 0; k <= system_names.length - 1; k++) {
 
                     if (comp.equals(system_names[k])) {
-                       ind_c=k;
+                        ind_c=k;
                     }
                 }
-                    String newdec="";
-                    boolean newlinevar=false;
-                    int newlvar=0;
-                    int char_to_replace=0;
-                            for (int m = system_declaration[ind_c][1].length() - 1; m >=0 ; m--) {
-                                if ((system_declaration[ind_c][1].charAt(m) == '\n') &&(newlinevar))
-                                {
-                                    char_to_replace=m;
-                                    newlinevar=false;
-                                    break;
+                String newdec="";
+                boolean newlinevar=false;
+                int newlvar=0;
+                int char_to_replace=0;
+                for (int m = system_declaration[ind_c][1].length() - 1; m >=0 ; m--) {
+                    if ((system_declaration[ind_c][1].charAt(m) == '\n') &&(newlinevar))
+                    {
+                        char_to_replace=m;
+                        newlinevar=false;
+                        break;
 
-                                }
-                                if(system_declaration[ind_c][1].charAt(m) == '\n')
-                                {
-                                    newlvar+=1;
-                                    if(newlvar==1)
-                                    {
-                                        newlinevar=true;
-                                    }
-                                }
-                            }
-                            boolean already_connections=false;
-                            for(int y=0;y<=index_connections-1;y++)
-                            {
-                                if(system_names[ind_c].equals(connections[y]))
-                                {
-                                    already_connections=true;
-                                }
-                            }
-                            if(already_connections)
-                            {
-
-                            }
-                            else {
-                                for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
-                                    if (i == char_to_replace) {
-
-                                        newdec = newdec + "\n\tconnections\n";
-
-                                    } else {
-                                        newdec = newdec + system_declaration[ind_c][1].charAt(i);
-                                    }
-                                }
-                                system_declaration[ind_c][1] = newdec;
-                                connections[index_connections] = system_names[ind_c];
-                                index_connections += 1;
-                            }
+                    }
+                    if(system_declaration[ind_c][1].charAt(m) == '\n')
+                    {
+                        newlvar+=1;
+                        if(newlvar==1)
+                        {
+                            newlinevar=true;
+                        }
                     }
                 }
+                boolean already_connections=false;
+                for(int y=0;y<=index_connections-1;y++)
+                {
+                    if(system_names[ind_c].equals(connections[y]))
+                    {
+                        already_connections=true;
+                    }
+                }
+                if(already_connections)
+                {
+
+                }
+                else {
+                    for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                        if (i == char_to_replace) {
+
+                            newdec = newdec + "\n\tconnections\n";
+
+                        } else {
+                            newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                        }
+                    }
+                    system_declaration[ind_c][1] = newdec;
+                    connections[index_connections] = system_names[ind_c];
+                    index_connections += 1;
+                }
+            }
+        }
 
 
 
@@ -695,6 +734,167 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 }
                 system_declaration[ind][0]=newdecl;
                 struct_val+=1;
+            }
+            stuct_nouns_used=ctx.Struct_noun().iterator();
+            boolean[] check_sub=new boolean[2];
+            boolean[] check_sub_2=new boolean[2];
+            String[] stn=new String[3];
+            while (stuct_nouns_used.hasNext())
+
+                for(int i=0;i<=2;i++)
+                {
+                    stn[i]=stuct_nouns_used.next().getText();
+                    if(i<2) {
+                        check_sub[i] = false;
+                        check_sub_2[i] = false;
+                    }
+                }
+            boolean all_in_c = false;
+                boolean all_in_c_1=false;
+            String comp="";
+            String comp2="";
+            for(int i=0;i<=index_subcomponents-1;i++) {
+                StringTokenizer list_of_sub = new StringTokenizer(system_subcomponents[i]);
+                StringTokenizer list_of_sub_2 = new StringTokenizer(system_subcomponents[i]);
+                comp = list_of_sub.nextToken();
+                comp2 = list_of_sub_2.nextToken();
+                while (list_of_sub.hasMoreTokens()) {
+                    String token = list_of_sub.nextToken();
+                    if (token.equals(stn[0])) {
+                        check_sub[0] = true;
+                    }
+                    if (token.equals(stn[1])) {
+                        check_sub[1] = true;
+                    }
+                    if (check_sub[0] && check_sub[1]) {
+                        all_in_c = true;
+                    }
+                }
+                while(list_of_sub_2.hasMoreTokens())
+                {
+                    String token = list_of_sub_2.nextToken();
+                    if (token.equals(stn[0])) {
+                        check_sub_2[0] = true;
+                    }
+                    if (token.equals(stn[2])) {
+                        check_sub_2[1] = true;
+                    }
+                    if (check_sub_2[0] && check_sub_2[1]) {
+                        all_in_c_1 = true;
+                    }
+                }
+            }
+            if(all_in_c) {
+                int ind_c = 0;
+                for (int k = 0; k <= system_names.length - 1; k++) {
+
+                    if (comp.equals(system_names[k])) {
+                        ind_c=k;
+                    }
+                }
+                String newdec="";
+                boolean newlinevar=false;
+                int newlvar=0;
+                int char_to_replace=0;
+                for (int m = system_declaration[ind_c][1].length() - 1; m >=0 ; m--) {
+                    if ((system_declaration[ind_c][1].charAt(m) == '\n') &&(newlinevar))
+                    {
+                        char_to_replace=m;
+                        newlinevar=false;
+                        break;
+
+                    }
+                    if(system_declaration[ind_c][1].charAt(m) == '\n')
+                    {
+                        newlvar+=1;
+                        if(newlvar==1)
+                        {
+                            newlinevar=true;
+                        }
+                    }
+                }
+                boolean already_connections=false;
+                for(int y=0;y<=index_connections-1;y++)
+                {
+                    if(system_names[ind_c].equals(connections[y]))
+                    {
+                        already_connections=true;
+                    }
+                }
+                if(already_connections)
+                {
+
+                }
+                else {
+                    for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                        if (i == char_to_replace) {
+
+                            newdec = newdec + "\n\tconnections\n";
+
+                        } else {
+                            newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                        }
+                    }
+                    system_declaration[ind_c][1] = newdec;
+                    connections[index_connections] = system_names[ind_c];
+                    index_connections += 1;
+                }
+            }
+            if(all_in_c_1) {
+                int ind_c = 0;
+                for (int k = 0; k <= system_names.length - 1; k++) {
+
+                    if (comp2.equals(system_names[k])) {
+                        ind_c=k;
+                    }
+                }
+                String newdec="";
+                boolean newlinevar=false;
+                int newlvar=0;
+                int char_to_replace=0;
+                for (int m = system_declaration[ind_c][1].length() - 1; m >=0 ; m--) {
+                    if ((system_declaration[ind_c][1].charAt(m) == '\n') &&(newlinevar))
+                    {
+                        char_to_replace=m;
+                        newlinevar=false;
+                        break;
+
+                    }
+                    if(system_declaration[ind_c][1].charAt(m) == '\n')
+                    {
+                        newlvar+=1;
+                        if(newlvar==1)
+                        {
+                            newlinevar=true;
+                        }
+                    }
+                }
+                boolean already_connections=false;
+                for(int y=0;y<=index_connections-1;y++)
+                {
+                    if(system_names[ind_c].equals(connections[y]))
+                    {
+                        already_connections=true;
+                    }
+                }
+                if(already_connections)
+                {
+
+                }
+                else {
+                    for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                        if (i == char_to_replace) {
+
+                            newdec = newdec + "\n\tconnections\n";
+
+                        } else {
+                            newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                        }
+                    }
+                    system_declaration[ind_c][1] = newdec;
+                    connections[index_connections] = system_names[ind_c];
+                    index_connections += 1;
+                }
             }
         }
 
