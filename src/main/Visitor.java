@@ -497,276 +497,291 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 system_declaration[ind][0]=newdecl;
             }
         }
-        else if((number_of_sn==2)&&((ctx.FROM()!=null)))
-        {
-            if(func_verb_used.equals("imports")) {
+        else if((number_of_sn==2)&&((ctx.FROM()!=null))) {
+            if (func_verb_used.equals("imports")) {
                 number_of_in_ports[0] = index_flows + 1;
-                number_of_out_ports[1]= index_flows + 1;
+                number_of_out_ports[1] = index_flows + 1;
             }
 
-            Iterator<TerminalNode> stuct_nouns_used=ctx.Struct_noun().iterator();
-            Iterator<TerminalNode> for_start=ctx.Struct_noun().iterator();
-            String start=for_start.next().getText();
-            int struct_val=0;
-            while(stuct_nouns_used.hasNext())
-            {
-                int ind=0;
-                String t=stuct_nouns_used.next().getText();
-                for(int i=0;i<=index-1;i++)
-                {
-                    if(t.equals(system_names[i]))
-                    {
-                        ind=i;
+            Iterator<TerminalNode> stuct_nouns_used = ctx.Struct_noun().iterator();
+            Iterator<TerminalNode> for_start = ctx.Struct_noun().iterator();
+            String start = for_start.next().getText();
+            String temp = for_start.next().getText();
+            int struct_val = 0;
+            while (stuct_nouns_used.hasNext()) {
+                int ind = 0;
+                String t = stuct_nouns_used.next().getText();
+                for (int i = 0; i <= index - 1; i++) {
+                    if (t.equals(system_names[i])) {
+                        ind = i;
                     }
                 }
-                boolean newline_var=true;
-                int var_count_newline=0;
-                String newdecl="";
-                for(int i=0;i<=system_declaration[ind][0].length()-1;i++)
-                {
-                    if(system_declaration[ind][0].charAt(i)=='\n')
-                    {
-                        var_count_newline+=1;
+                boolean newline_var = true;
+                int var_count_newline = 0;
+                String newdecl = "";
+                for (int i = 0; i <= system_declaration[ind][0].length() - 1; i++) {
+                    if (system_declaration[ind][0].charAt(i) == '\n') {
+                        var_count_newline += 1;
                     }
-                    if((var_count_newline==2)&&(newline_var))
-                    {
-                        newline_var=true;
-                        int index_portnames=0;
-                        boolean already_in_ports=false;
-                        for(int j=0;j<=number_of_in_ports[struct_val]-1;j++)
-                        {
-                            for (int k=0;k<=index_ports-1;k++) {
-                                StringTokenizer stp=new StringTokenizer(portnames[k]);
-                                String port_comp=stp.nextToken();
-                                if(port_comp.equals(system_names[ind]))
-                                {
-                                    already_in_ports=true;
-                                    index_portnames=k;
+                    if ((var_count_newline == 2) && (newline_var)) {
+                        newline_var = true;
+                        int index_portnames = 0;
+                        boolean already_in_ports = false;
+                        for (int j = 0; j <= number_of_in_ports[struct_val] - 1; j++) {
+                            for (int k = 0; k <= index_ports - 1; k++) {
+                                StringTokenizer stp = new StringTokenizer(portnames[k]);
+                                String port_comp = stp.nextToken();
+                                if (port_comp.equals(system_names[ind])) {
+                                    already_in_ports = true;
+                                    index_portnames = k;
                                 }
                             }
                             if (already_in_ports) {
 
-                                StringTokenizer stp=new StringTokenizer(portnames[index_portnames]);
+                                StringTokenizer stp = new StringTokenizer(portnames[index_portnames]);
                                 stp.nextToken();
-                                boolean if_named_port=false;
-                                while(stp.hasMoreTokens())
-                                {
-                                    String portname_current=stp.nextToken();
-                                    if(flows[j].equals(portname_current))
-                                    {
-                                        if_named_port=true;
+                                boolean if_named_port = false;
+                                while (stp.hasMoreTokens()) {
+                                    String portname_current = stp.nextToken();
+                                    if (flows[j].equals(portname_current)) {
+                                        if_named_port = true;
                                     }
                                 }
-                                if(if_named_port)
-                                {
-                                    String temp=stuct_nouns_used.next().getText();
-                                    newdecl = newdecl + "\n\t\t" + flows[j]+"_from_"+temp+ ": in data port;";
-                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_from_"+temp;
-                                }
-                                else {
+                                if (if_named_port) {
+
+                                    newdecl = newdecl + "\n\t\t" + flows[j] + "_from_" + temp + ": in data port;";
+                                    portnames[index_portnames] = portnames[index_portnames] + " " + flows[j] + "_from_" + temp;
+                                } else {
                                     newdecl = newdecl + "\n\t\t" + flows[j] + ": in data port;";
-                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j];
+                                    portnames[index_portnames] = portnames[index_portnames] + " " + flows[j];
                                 }
 
                             } else {
-                                portnames[index_ports]=system_names[ind]+" "+flows[j];
-                                index_ports+=1;
+                                portnames[index_ports] = system_names[ind] + " " + flows[j];
+                                index_ports += 1;
                                 newdecl = newdecl + "\n\t\t" + flows[j] + ": in data port;";
                             }
                         }
-                        for(int j=0;j<=number_of_out_ports[struct_val]-1;j++)
-                        {
-                            for (int k=0;k<=index_ports-1;k++) {
-                                StringTokenizer stp=new StringTokenizer(portnames[k]);
-                                String port_comp=stp.nextToken();
-                                if(port_comp.equals(system_names[ind]))
-                                {
-                                    already_in_ports=true;
-                                    index_portnames=k;
+                        for (int j = 0; j <= number_of_out_ports[struct_val] - 1; j++) {
+                            for (int k = 0; k <= index_ports - 1; k++) {
+                                StringTokenizer stp = new StringTokenizer(portnames[k]);
+                                String port_comp = stp.nextToken();
+                                if (port_comp.equals(system_names[ind])) {
+                                    already_in_ports = true;
+                                    index_portnames = k;
                                 }
                             }
                             if (already_in_ports) {
 
-                                StringTokenizer stp=new StringTokenizer(portnames[index_portnames]);
+                                StringTokenizer stp = new StringTokenizer(portnames[index_portnames]);
                                 stp.nextToken();
-                                boolean if_named_port=false;
-                                while(stp.hasMoreTokens())
-                                {
-                                    String portname_current=stp.nextToken();
-                                    if(flows[j].equals(portname_current))
-                                    {
-                                        if_named_port=true;
+                                boolean if_named_port = false;
+                                while (stp.hasMoreTokens()) {
+                                    String portname_current = stp.nextToken();
+                                    if (flows[j].equals(portname_current)) {
+                                        if_named_port = true;
                                     }
                                 }
-                                if(if_named_port)
-                                {
-                                    newdecl = newdecl + "\n\t\t" + flows[j]+"_to_"+start+ ": out data port;";
-                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_to_"+start;
-                                }
-                                else {
+                                if (if_named_port) {
+                                    newdecl = newdecl + "\n\t\t" + flows[j] + "_to_" + start + ": out data port;";
+                                    portnames[index_portnames] = portnames[index_portnames] + " " + flows[j] + "_to_" + start;
+                                } else {
                                     newdecl = newdecl + "\n\t\t" + flows[j] + ": out data port;";
-                                    portnames[index_portnames]=portnames[index_portnames]+" "+flows[j];
+                                    portnames[index_portnames] = portnames[index_portnames] + " " + flows[j];
                                 }
 
                             } else {
-                                portnames[index_ports]=system_names[ind]+" "+flows[j];
-                                index_ports+=1;
+                                portnames[index_ports] = system_names[ind] + " " + flows[j];
+                                index_ports += 1;
                                 newdecl = newdecl + "\n\t\t" + flows[j] + ": out data port;";
                             }
                         }
-                        newline_var=false;
+                        newline_var = false;
                     }
-                    newdecl=newdecl+system_declaration[ind][0].charAt(i);
+                    newdecl = newdecl + system_declaration[ind][0].charAt(i);
                 }
-                system_declaration[ind][0]=newdecl;
-                struct_val+=1;
+                system_declaration[ind][0] = newdecl;
+                struct_val += 1;
             }
-            stuct_nouns_used=ctx.Struct_noun().iterator();
-            boolean[] check_sub=new boolean[2];
-            String[] stn=new String[2];
-            while (stuct_nouns_used.hasNext())
-
-                for(int i=0;i<=1;i++)
-                {
-                    stn[i]=stuct_nouns_used.next().getText();
-                    check_sub[i]=false;
+            stuct_nouns_used = ctx.Struct_noun().iterator();
+            boolean[] check_sub = new boolean[2];
+            String[] stn = new String[2];
+            while (stuct_nouns_used.hasNext()) {
+                for (int i = 0; i <= 1; i++) {
+                    stn[i] = stuct_nouns_used.next().getText();
+                    check_sub[i] = false;
                 }
-            boolean all_in_c = false;
-            String comp="";
-            for(int i=0;i<=index_subcomponents-1;i++) {
-                StringTokenizer list_of_sub = new StringTokenizer(system_subcomponents[i]);
-                comp = list_of_sub.nextToken();
-                check_sub[0]=false;
-                check_sub[1]=false;
-                while (list_of_sub.hasMoreTokens()) {
-                    String token = list_of_sub.nextToken();
-                    if (token.equals(stn[0])) {
-                        check_sub[0] = true;
-                    }
-                    if (token.equals(stn[1])) {
-                        check_sub[1] = true;
-                    }
-                    if (check_sub[0] && check_sub[1]) {
-                        all_in_c = true;
-                    }
-                }
-            }
-            if(all_in_c) {
-                int ind_c = 0;
-                for (int k = 0; k <= system_names.length - 1; k++) {
-
-                    if (comp.equals(system_names[k])) {
-                        ind_c=k;
-                    }
-                }
-                String newdec="";
-                boolean newlinevar=false;
-                int newlvar=0;
-                int char_to_replace=0;
-                for (int m = system_declaration[ind_c][1].length() - 1; m >=0 ; m--) {
-                    if ((system_declaration[ind_c][1].charAt(m) == '\n') &&(newlinevar))
-                    {
-                        char_to_replace=m;
-                        newlinevar=false;
-                        break;
-
-                    }
-                    if(system_declaration[ind_c][1].charAt(m) == '\n')
-                    {
-                        newlvar+=1;
-                        if(newlvar==1)
-                        {
-                            newlinevar=true;
+                boolean all_in_c = false;
+                String comp = "";
+                for (int i = 0; i <= index_subcomponents - 1; i++) {
+                    StringTokenizer list_of_sub = new StringTokenizer(system_subcomponents[i]);
+                    comp = list_of_sub.nextToken();
+                    check_sub[0] = false;
+                    check_sub[1] = false;
+                    while (list_of_sub.hasMoreTokens()) {
+                        String token = list_of_sub.nextToken();
+                        if (token.equals(stn[0])) {
+                            check_sub[0] = true;
+                        }
+                        if (token.equals(stn[1])) {
+                            check_sub[1] = true;
+                        }
+                        if (check_sub[0] && check_sub[1]) {
+                            all_in_c = true;
                         }
                     }
                 }
-                boolean already_connections=false;
-                for(int y=0;y<=index_connections-1;y++)
-                {
-                    if(system_names[ind_c].equals(connections[y]))
-                    {
-                        already_connections=true;
-                    }
-                }
-                if(already_connections)
-                {
-                    Iterator<TerminalNode> tostore= ctx.Struct_noun().iterator();
-                    String tostorestn[]=new String[2];
-                    tostorestn[0]=tostore.next().getText();
-                    tostorestn[1]=tostore.next().getText();
-                    String startport="";
-                    String endport="";
-                    for(int v=0;v<=index_ports-1;v++)
-                    {
-                        StringTokenizer start_comp=new StringTokenizer(portnames[v]);
-                        String start_node=start_comp.nextToken();
-                        if(start_node.equals(tostorestn[0]))
-                        {
-                            while(start_comp.hasMoreTokens())
-                            {
-                                endport=start_comp.nextToken();
+                if (all_in_c) {
+                    Iterator<TerminalNode> tostore = ctx.Struct_noun().iterator();
+                    String tostorestn[] = new String[2];
+                    tostorestn[0] = tostore.next().getText();
+                    tostorestn[1] = tostore.next().getText();
+                    int already_done_ports = 0;
+                    int number_of_tokens_start = 0;
+                    int number_of_tokens_last = 0;
+                    for (int x = 0; x <= index_ports - 1; x++) {
+                        StringTokenizer start_comp = new StringTokenizer(portnames[x]);
+                        String start_node = start_comp.nextToken();
+                        if (start_node.equals(tostorestn[0])) {
+                            while (start_comp.hasMoreTokens()) {
+                                number_of_tokens_start += 1;
+                                start_comp.nextToken();
                             }
                         }
-                        if(start_node.equals(tostorestn[1]))
-                        {
-                            while(start_comp.hasMoreTokens())
-                            {
-                                startport=start_comp.nextToken();
+                        if (start_node.equals(tostorestn[1])) {
+                            while (start_comp.hasMoreTokens()) {
+                                number_of_tokens_last += 1;
+                                start_comp.nextToken();
                             }
                         }
                     }
-                    for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
-                        if (i == char_to_replace) {
+                    while (already_done_ports <= index_flows) {
+                        int ind_c = 0;
+                        for (int k = 0; k <= system_names.length - 1; k++) {
 
-                            sys_connection[ind_c]=sys_connection[ind_c]+1;
-                            newdec= newdec+"\n\t\t"+system_names[ind_c]+sys_connection[ind_c]+": port this_"+tostorestn[1]+"."+startport+"->"+"this_"+tostorestn[0]+"."+endport+";\n";
-
-                        } else {
-                            newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                            if (comp.equals(system_names[k])) {
+                                ind_c = k;
+                            }
                         }
-                    }
-                    system_declaration[ind_c][1] = newdec;
-                }
-                else {
-                    Iterator<TerminalNode> tostore= ctx.Struct_noun().iterator();
-                    String tostorestn[]=new String[2];
-                    tostorestn[0]=tostore.next().getText();
-                    tostorestn[1]=tostore.next().getText();
-                    String startport="";
-                    String endport="";
-                    for(int v=0;v<=index_ports-1;v++)
-                    {
-                        StringTokenizer start_comp=new StringTokenizer(portnames[v]);
-                        String start_node=start_comp.nextToken();
-                                if(start_node.equals(tostorestn[0]))
-                                {
-                                    while(start_comp.hasMoreTokens())
-                                    {
-                                        endport=start_comp.nextToken();
+                        String newdec = "";
+                        boolean newlinevar = false;
+                        int newlvar = 0;
+                        int char_to_replace = 0;
+                        for (int m = system_declaration[ind_c][1].length() - 1; m >= 0; m--) {
+                            if ((system_declaration[ind_c][1].charAt(m) == '\n') && (newlinevar)) {
+                                char_to_replace = m;
+                                newlinevar = false;
+                                break;
+
+                            }
+                            if (system_declaration[ind_c][1].charAt(m) == '\n') {
+                                newlvar += 1;
+                                if (newlvar == 1) {
+                                    newlinevar = true;
+                                }
+                            }
+                        }
+                        boolean already_connections = false;
+                        for (int y = 0; y <= index_connections - 1; y++) {
+                            if (system_names[ind_c].equals(connections[y])) {
+                                already_connections = true;
+                            }
+                        }
+
+
+                        if (already_connections) {
+                            String startport = "";
+                            String endport = "";
+                            for (int v = 0; v <= index_ports - 1; v++) {
+                                StringTokenizer start_comp = new StringTokenizer(portnames[v]);
+                                String start_node = start_comp.nextToken();
+                                if (start_node.equals(tostorestn[0])) {
+                                    int c_s = 0;
+                                    while (start_comp.hasMoreTokens()) {
+
+                                        endport = start_comp.nextToken();
+                                        c_s += 1;
+
+                                        if (c_s >= (number_of_tokens_start - index_flows + already_done_ports)) {
+
+                                            break;
+                                        }
                                     }
                                 }
-                    if(start_node.equals(tostorestn[1]))
-                    {
-                        while(start_comp.hasMoreTokens())
-                        {
-                            startport=start_comp.nextToken();
-                        }
-                    }
-                    }
-                    for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
-                        if (i == char_to_replace) {
+                                if (start_node.equals(tostorestn[1])) {
+                                    int c_e = 0;
+                                    while (start_comp.hasMoreTokens()) {
+                                        startport = start_comp.nextToken();
+                                        c_e += 1;
+                                if(c_e>=(number_of_tokens_last-index_flows+already_done_ports))
+                                {
+                                    break;
+                                }
+                                    }
+                                }
+                            }
+                            for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                                if (i == char_to_replace) {
 
-                            newdec = newdec + "\n\tconnections\n";
-                            sys_connection[ind_c]=1;
-                            newdec= newdec+"\t\t"+system_names[ind_c]+sys_connection[ind_c]+": port this_"+tostorestn[1]+"."+startport+"->"+"this_"+tostorestn[0]+"."+endport+";\n";
+                                    sys_connection[ind_c] = sys_connection[ind_c] + 1;
+                                    newdec = newdec + "\n\t\t" + system_names[ind_c] + sys_connection[ind_c] + ": port this_" + tostorestn[1] + "." + startport + "->" + "this_" + tostorestn[0] + "." + endport + ";\n";
 
+                                } else {
+                                    newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                                }
+                            }
+                            system_declaration[ind_c][1] = newdec;
+                            already_done_ports += 1;
                         } else {
-                            newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                            String startport = "";
+                            String endport = "";
+
+                            for (int v = 0; v <= index_ports - 1; v++) {
+                                StringTokenizer start_comp = new StringTokenizer(portnames[v]);
+                                String start_node = start_comp.nextToken();
+                                if (start_node.equals(tostorestn[0])) {
+                                    int c_s = 0;
+                                    while (start_comp.hasMoreTokens()) {
+
+                                        endport = start_comp.nextToken();
+                                        c_s += 1;
+
+                                        if (c_s >= (number_of_tokens_start - index_flows + already_done_ports)) {
+
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (start_node.equals(tostorestn[1])) {
+                                    int c_e = 0;
+                                    while (start_comp.hasMoreTokens()) {
+                                        startport = start_comp.nextToken();
+                                        c_e += 1;
+                                        if (c_e >= (number_of_tokens_last - index_flows + already_done_ports)) {
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                                if (i == char_to_replace) {
+
+                                    newdec = newdec + "\n\tconnections\n";
+                                    sys_connection[ind_c] = 1;
+                                    newdec = newdec + "\t\t" + system_names[ind_c] + sys_connection[ind_c] + ": port this_" + tostorestn[1] + "." + startport + "->" + "this_" + tostorestn[0] + "." + endport + ";\n";
+
+                                } else {
+                                    newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                                }
+                            }
+                            system_declaration[ind_c][1] = newdec;
+                            connections[index_connections] = system_names[ind_c];
+                            index_connections += 1;
+                            already_done_ports += 1;
                         }
                     }
-                    system_declaration[ind_c][1] = newdec;
-                    connections[index_connections] = system_names[ind_c];
-                    index_connections += 1;
                 }
             }
         }
@@ -784,11 +799,13 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             Iterator<TerminalNode> stuct_nouns_used=ctx.Struct_noun().iterator();
             Iterator<TerminalNode> for_start=ctx.Struct_noun().iterator();
             String start=for_start.next().getText();
+            String temp=for_start.next().getText();
             int struct_val=0;
             while(stuct_nouns_used.hasNext())
             {
                 int ind=0;
                 String t=stuct_nouns_used.next().getText();
+
                 for(int i=0;i<=index-1;i++)
                 {
                     if(t.equals(system_names[i]))
@@ -876,7 +893,7 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                                 }
                                 if(if_named_port)
                                 {
-                                    String temp=stuct_nouns_used.next().getText();
+
                                     newdecl = newdecl + "\n\t\t" + flows[j]+"_to_"+ temp+": out data port;";
                                     portnames[index_portnames]=portnames[index_portnames]+" "+flows[j]+"_to_"+ temp;
                                 }
@@ -908,6 +925,7 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                     stn[i]=stuct_nouns_used.next().getText();
                     check_sub[i]=false;
                 }
+
             boolean all_in_c = false;
             String comp="";
             for(int i=0;i<=index_subcomponents-1;i++) {
@@ -929,122 +947,153 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 }
             }
             if(all_in_c) {
-                int ind_c = 0;
-                for (int k = 0; k <= system_names.length - 1; k++) {
-
-                    if (comp.equals(system_names[k])) {
-                        ind_c=k;
+                Iterator<TerminalNode> tostore = ctx.Struct_noun().iterator();
+                String tostorestn[] = new String[2];
+                tostorestn[0] = tostore.next().getText();
+                tostorestn[1] = tostore.next().getText();
+                int already_done_ports = 0;
+                int number_of_tokens_start = 0;
+                int number_of_tokens_last = 0;
+                for (int x = 0; x <= index_ports - 1; x++) {
+                    StringTokenizer start_comp = new StringTokenizer(portnames[x]);
+                    String start_node = start_comp.nextToken();
+                    if (start_node.equals(tostorestn[0])) {
+                        while (start_comp.hasMoreTokens()) {
+                            number_of_tokens_start += 1;
+                            start_comp.nextToken();
+                        }
                     }
-                }
-                String newdec="";
-                boolean newlinevar=false;
-                int newlvar=0;
-                int char_to_replace=0;
-                for (int m = system_declaration[ind_c][1].length() - 1; m >=0 ; m--) {
-                    if ((system_declaration[ind_c][1].charAt(m) == '\n') &&(newlinevar))
-                    {
-                        char_to_replace=m;
-                        newlinevar=false;
-                        break;
-
-                    }
-                    if(system_declaration[ind_c][1].charAt(m) == '\n')
-                    {
-                        newlvar+=1;
-                        if(newlvar==1)
-                        {
-                            newlinevar=true;
+                    if (start_node.equals(tostorestn[1])) {
+                        while (start_comp.hasMoreTokens()) {
+                            number_of_tokens_last += 1;
+                            start_comp.nextToken();
                         }
                     }
                 }
-                boolean already_connections=false;
-                for(int y=0;y<=index_connections-1;y++)
-                {
-                    if(system_names[ind_c].equals(connections[y]))
-                    {
-                        already_connections=true;
-                    }
-                }
-                if(already_connections)
-                {
-                    Iterator<TerminalNode> tostore= ctx.Struct_noun().iterator();
-                    String tostorestn[]=new String[2];
-                    tostorestn[0]=tostore.next().getText();
-                    tostorestn[1]=tostore.next().getText();
-                    String startport="";
-                    String endport="";
-                    for(int v=0;v<=index_ports-1;v++)
-                    {
-                        StringTokenizer start_comp=new StringTokenizer(portnames[v]);
-                        String start_node=start_comp.nextToken();
-                        if(start_node.equals(tostorestn[0]))
-                        {
-                            while(start_comp.hasMoreTokens())
-                            {
-                                startport=start_comp.nextToken();
-                            }
+                while (already_done_ports <= index_flows) {
+                    int ind_c = 0;
+                    for (int k = 0; k <= system_names.length - 1; k++) {
+
+                        if (comp.equals(system_names[k])) {
+                            ind_c = k;
                         }
-                        if(start_node.equals(tostorestn[1]))
-                        {
-                            while(start_comp.hasMoreTokens())
-                            {
-                                endport=start_comp.nextToken();
+                    }
+                    String newdec = "";
+                    boolean newlinevar = false;
+                    int newlvar = 0;
+                    int char_to_replace = 0;
+                    for (int m = system_declaration[ind_c][1].length() - 1; m >= 0; m--) {
+                        if ((system_declaration[ind_c][1].charAt(m) == '\n') && (newlinevar)) {
+                            char_to_replace = m;
+                            newlinevar = false;
+                            break;
+
+                        }
+                        if (system_declaration[ind_c][1].charAt(m) == '\n') {
+                            newlvar += 1;
+                            if (newlvar == 1) {
+                                newlinevar = true;
                             }
                         }
                     }
-                    for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
-                        if (i == char_to_replace) {
-
-                            sys_connection[ind_c]=sys_connection[ind_c]+1;
-                            newdec= newdec+"\n\t\t"+system_names[ind_c]+sys_connection[ind_c]+": port this_"+tostorestn[0]+"."+startport+"->"+"this_"+tostorestn[1]+"."+endport+";\n";
-
-                        } else {
-                            newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                    boolean already_connections = false;
+                    for (int y = 0; y <= index_connections - 1; y++) {
+                        if (system_names[ind_c].equals(connections[y])) {
+                            already_connections = true;
                         }
                     }
-                    system_declaration[ind_c][1] = newdec;
-                }
-                else {
+                    if (already_connections) {
 
-                    Iterator<TerminalNode> tostore= ctx.Struct_noun().iterator();
-                    String tostorestn[]=new String[2];
-                    tostorestn[0]=tostore.next().getText();
-                    tostorestn[1]=tostore.next().getText();
-                    String startport="";
-                    String endport="";
-                    for(int v=0;v<=index_ports-1;v++)
-                    {
-                        StringTokenizer start_comp=new StringTokenizer(portnames[v]);
-                        String start_node=start_comp.nextToken();
-                        if(start_node.equals(tostorestn[0]))
-                        {
-                            while(start_comp.hasMoreTokens())
-                            {
-                                startport=start_comp.nextToken();
+                        String startport = "";
+                        String endport = "";
+                        for (int v = 0; v <= index_ports - 1; v++) {
+                            StringTokenizer start_comp = new StringTokenizer(portnames[v]);
+                            String start_node = start_comp.nextToken();
+                            if (start_node.equals(tostorestn[0])) {
+                                int c_s=0;
+                                while (start_comp.hasMoreTokens()) {
+                                    startport = start_comp.nextToken();
+                                    c_s += 1;
+
+                                    if (c_s >= (number_of_tokens_start - index_flows + already_done_ports)) {
+
+                                        break;
+                                    }
+                                }
+                            }
+                            if (start_node.equals(tostorestn[1])) {
+                                int c_e=0;
+                                while (start_comp.hasMoreTokens()) {
+                                    endport = start_comp.nextToken();
+                                    c_e += 1;
+
+                                    if (c_e >= (number_of_tokens_last - index_flows + already_done_ports)) {
+
+                                        break;
+                                    }
+                                }
                             }
                         }
-                        if(start_node.equals(tostorestn[1]))
-                        {
-                            while(start_comp.hasMoreTokens())
-                            {
-                                endport=start_comp.nextToken();
+                        for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                            if (i == char_to_replace) {
+
+                                sys_connection[ind_c] = sys_connection[ind_c] + 1;
+                                newdec = newdec + "\n\t\t" + system_names[ind_c] + sys_connection[ind_c] + ": port this_" + tostorestn[0] + "." + startport + "->" + "this_" + tostorestn[1] + "." + endport + ";\n";
+
+                            } else {
+                                newdec = newdec + system_declaration[ind_c][1].charAt(i);
                             }
                         }
-                    }
-                    for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
-                        if (i == char_to_replace) {
+                        system_declaration[ind_c][1] = newdec;
+                        already_done_ports+=1;
+                    } else {
 
-                            newdec = newdec + "\n\tconnections\n";
-                            sys_connection[ind_c]=1;
-                            newdec= newdec+"\t\t"+system_names[ind_c]+sys_connection[ind_c]+": port this_"+tostorestn[0]+"."+startport+"->"+"this_"+tostorestn[1]+"."+endport+";\n";
+                        String startport = "";
+                        String endport = "";
+                        for (int v = 0; v <= index_ports - 1; v++) {
+                            StringTokenizer start_comp = new StringTokenizer(portnames[v]);
+                            String start_node = start_comp.nextToken();
+                            if (start_node.equals(tostorestn[0])) {
+                                int c_s=0;
+                                while (start_comp.hasMoreTokens()) {
+                                    startport = start_comp.nextToken();
+                                    c_s += 1;
 
-                        } else {
-                            newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                                    if (c_s >= (number_of_tokens_start - index_flows + already_done_ports)) {
+
+                                        break;
+                                    }
+                                }
+                            }
+                            if (start_node.equals(tostorestn[1])) {
+                                int c_e=0;
+                                while (start_comp.hasMoreTokens()) {
+                                    endport = start_comp.nextToken();
+                                    c_e += 1;
+
+                                    if (c_e >= (number_of_tokens_last - index_flows + already_done_ports)) {
+
+                                        break;
+                                    }
+                                }
+                            }
                         }
+                        for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                            if (i == char_to_replace) {
+
+                                newdec = newdec + "\n\tconnections\n";
+                                sys_connection[ind_c] = 1;
+                                newdec = newdec + "\t\t" + system_names[ind_c] + sys_connection[ind_c] + ": port this_" + tostorestn[0] + "." + startport + "->" + "this_" + tostorestn[1] + "." + endport + ";\n";
+
+                            } else {
+                                newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                            }
+                        }
+                        system_declaration[ind_c][1] = newdec;
+                        connections[index_connections] = system_names[ind_c];
+                        index_connections += 1;
+                        already_done_ports+=1;
                     }
-                    system_declaration[ind_c][1] = newdec;
-                    connections[index_connections] = system_names[ind_c];
-                    index_connections += 1;
                 }
             }
         }
@@ -1288,13 +1337,78 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 }
                 if(already_connections)
                 {
+                    Iterator<TerminalNode> tostore= ctx.Struct_noun().iterator();
+                    String tostorestn[]=new String[2];
+                    tostorestn[0]=tostore.next().getText();
+                    tostorestn[1]=tostore.next().getText();
+                    String startport="";
+                    String endport="";
+                    String second_last="";
+                    for(int v=0;v<=index_ports-1;v++)
+                    {
+                        StringTokenizer start_comp=new StringTokenizer(portnames[v]);
+                        String start_node=start_comp.nextToken();
+                        if(start_node.equals(tostorestn[0]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {   second_last=endport;
+                                endport=start_comp.nextToken();
+                            }
+                        }
+                        if(start_node.equals(tostorestn[1]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                startport=start_comp.nextToken();
+                            }
+                        }
+                    }
+                    for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                        if (i == char_to_replace) {
 
+                            sys_connection[ind_c]=sys_connection[ind_c]+1;
+                            newdec= newdec+"\n\t\t"+system_names[ind_c]+sys_connection[ind_c]+": port this_"+tostorestn[1]+"."+startport+"->"+"this_"+tostorestn[0]+"."+second_last+";\n";
+
+                        } else {
+                            newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                        }
+                    }
+                    system_declaration[ind_c][1] = newdec;
                 }
                 else {
+                    Iterator<TerminalNode> tostore= ctx.Struct_noun().iterator();
+                    String tostorestn[]=new String[2];
+                    tostorestn[0]=tostore.next().getText();
+                    tostorestn[1]=tostore.next().getText();
+                    String startport="";
+                    String endport="";
+                    String second_last="";
+                    for(int v=0;v<=index_ports-1;v++)
+                    {
+                        StringTokenizer start_comp=new StringTokenizer(portnames[v]);
+                        String start_node=start_comp.nextToken();
+                        if(start_node.equals(tostorestn[0]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                second_last=endport;
+                                endport=start_comp.nextToken();
+                            }
+                        }
+                        if(start_node.equals(tostorestn[1]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                startport=start_comp.nextToken();
+                            }
+                        }
+                    }
                     for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
                         if (i == char_to_replace) {
 
                             newdec = newdec + "\n\tconnections\n";
+                            sys_connection[ind_c]=1;
+                            newdec= newdec+"\n\t\t"+system_names[ind_c]+sys_connection[ind_c]+": port this_"+tostorestn[1]+"."+startport+"->"+"this_"+tostorestn[0]+"."+second_last+";\n";
 
                         } else {
                             newdec = newdec + system_declaration[ind_c][1].charAt(i);
@@ -1344,13 +1458,77 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 }
                 if(already_connections)
                 {
+                    Iterator<TerminalNode> tostore= ctx.Struct_noun().iterator();
+                    String tostorestn[]=new String[2];
+                    tostorestn[0]=tostore.next().getText();
+                    tostore.next();
+                    tostorestn[1]=tostore.next().getText();
+                    String startport="";
+                    String endport="";
+                    for(int v=0;v<=index_ports-1;v++)
+                    {
+                        StringTokenizer start_comp=new StringTokenizer(portnames[v]);
+                        String start_node=start_comp.nextToken();
+                        if(start_node.equals(tostorestn[0]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                startport=start_comp.nextToken();
+                            }
+                        }
+                        if(start_node.equals(tostorestn[1]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                endport=start_comp.nextToken();
+                            }
+                        }
+                    }
+                    for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
+                        if (i == char_to_replace) {
 
+                            sys_connection[ind_c]=sys_connection[ind_c]+1;
+                            newdec= newdec+"\n\t\t"+system_names[ind_c]+sys_connection[ind_c]+": port this_"+tostorestn[0]+"."+startport+"->"+"this_"+tostorestn[1]+"."+endport+";\n";
+
+                        } else {
+                            newdec = newdec + system_declaration[ind_c][1].charAt(i);
+                        }
+                    }
+                    system_declaration[ind_c][1] = newdec;
                 }
                 else {
+                    Iterator<TerminalNode> tostore= ctx.Struct_noun().iterator();
+                    String tostorestn[]=new String[2];
+                    tostorestn[0]=tostore.next().getText();
+                    tostore.next();
+                    tostorestn[1]=tostore.next().getText();
+                    String startport="";
+                    String endport="";
+                    for(int v=0;v<=index_ports-1;v++)
+                    {
+                        StringTokenizer start_comp=new StringTokenizer(portnames[v]);
+                        String start_node=start_comp.nextToken();
+                        if(start_node.equals(tostorestn[0]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                startport=start_comp.nextToken();
+                            }
+                        }
+                        if(start_node.equals(tostorestn[1]))
+                        {
+                            while(start_comp.hasMoreTokens())
+                            {
+                                endport=start_comp.nextToken();
+                            }
+                        }
+                    }
                     for (int i = 0; i <= system_declaration[ind_c][1].length() - 1; i++) {
                         if (i == char_to_replace) {
 
                             newdec = newdec + "\n\tconnections\n";
+                            sys_connection[ind_c]=1;
+                            newdec= newdec+"\n\t\t"+system_names[ind_c]+sys_connection[ind_c]+": port this_"+tostorestn[0]+"."+startport+"->"+"this_"+tostorestn[1]+"."+endport+";\n";
 
                         } else {
                             newdec = newdec + system_declaration[ind_c][1].charAt(i);
@@ -1374,8 +1552,10 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
      */
     @Override
     public Object visitEnergizing_stmt(TextToAADLParser.Energizing_stmtContext ctx) {
-//        System.out.println(ctx.getText());
-        return visitChildren(ctx);
+        System.out.println(ctx.getText());
+        System.out.println(ctx.Struct_noun());
+
+        return null;
     }
 
     /**
