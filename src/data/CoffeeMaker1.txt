@@ -10,3 +10,4 @@ VERTICAL_PIPE transfers hot water from HOT_WATER_PIPE to SHOWER_HEAD.
 FILTER imports ground coffee , liquid coffee and hot water from SHOWER_HEAD.
 FILTER couples ground coffee and hot water.
 FILTER transfers liquid coffee to GLASSWARE.
+FILTER connected to GLASSWARE , HANDLE and LID.

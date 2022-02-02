@@ -37,11 +37,23 @@ public interface TextToAADLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctional_stmts(TextToAADLParser.Functional_stmtsContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link TextToAADLParser#structural_stmts}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStructural_stmts(TextToAADLParser.Structural_stmtsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link TextToAADLParser#structural_stmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitStructural_stmt(TextToAADLParser.Structural_stmtContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link TextToAADLParser#connection_stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConnection_stmt(TextToAADLParser.Connection_stmtContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link TextToAADLParser#functional_stmt}.
 	 * @param ctx the parse tree

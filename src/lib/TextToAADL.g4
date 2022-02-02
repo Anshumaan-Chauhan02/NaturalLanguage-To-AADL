@@ -8,11 +8,15 @@ nlparch : sentences+;
 
 sentences: sentence+;
 
-sentence : (structural_stmt+)| (functional_stmts+) ;
+sentence : (structural_stmts+)| (functional_stmts+) ;
 
 functional_stmts: ((functional_stmt)|(energizing_stmt)) End WS;
 
-structural_stmt : Struct_noun WS Struct_verb WS struct_multinoun End WS;
+structural_stmts: ((structural_stmt)|(connection_stmt)) End WS;
+
+structural_stmt : Struct_noun WS Struct_verb WS struct_multinoun;
+
+connection_stmt: Struct_noun WS Connected_Verb WS TO WS struct_multinoun;
 
 functional_stmt: (Struct_noun WS FUNC_VERB WS multi_flow WS FROM WS Struct_noun WS TO WS Struct_noun)|
                   (Struct_noun WS FUNC_VERB WS multi_flow WS TO WS Struct_noun) |
@@ -38,7 +42,8 @@ material : SOLID|
            LIQUID|
            GAS;
 
-Struct_noun : [A-Z]+[_A-Z]*;
+Struct_noun : [A-Z0-9]+[_A-Z0-9]*;
+Connected_Verb: 'connected';
 Comma : ',';
 And: 'and';
 End: '.';

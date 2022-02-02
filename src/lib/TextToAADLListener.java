@@ -50,6 +50,16 @@ public interface TextToAADLListener extends ParseTreeListener {
 	 */
 	void exitFunctional_stmts(TextToAADLParser.Functional_stmtsContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link TextToAADLParser#structural_stmts}.
+	 * @param ctx the parse tree
+	 */
+	void enterStructural_stmts(TextToAADLParser.Structural_stmtsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TextToAADLParser#structural_stmts}.
+	 * @param ctx the parse tree
+	 */
+	void exitStructural_stmts(TextToAADLParser.Structural_stmtsContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link TextToAADLParser#structural_stmt}.
 	 * @param ctx the parse tree
 	 */
@@ -59,6 +69,16 @@ public interface TextToAADLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStructural_stmt(TextToAADLParser.Structural_stmtContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link TextToAADLParser#connection_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void enterConnection_stmt(TextToAADLParser.Connection_stmtContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link TextToAADLParser#connection_stmt}.
+	 * @param ctx the parse tree
+	 */
+	void exitConnection_stmt(TextToAADLParser.Connection_stmtContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link TextToAADLParser#functional_stmt}.
 	 * @param ctx the parse tree

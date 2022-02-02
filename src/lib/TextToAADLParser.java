@@ -19,33 +19,35 @@ public class TextToAADLParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		Struct_noun=1, Comma=2, And=3, End=4, IT=5, TO=6, THEM=7, FROM=8, Struct_verb=9, 
-		FUNC_VERB=10, ENERGY=11, SOLID=12, LIQUID=13, GAS=14, SIGNAL=15, WS=16;
+		Struct_noun=1, Connected_Verb=2, Comma=3, And=4, End=5, IT=6, TO=7, THEM=8, 
+		FROM=9, Struct_verb=10, FUNC_VERB=11, ENERGY=12, SOLID=13, LIQUID=14, 
+		GAS=15, SIGNAL=16, WS=17;
 	public static final int
 		RULE_nlparch = 0, RULE_sentences = 1, RULE_sentence = 2, RULE_functional_stmts = 3, 
-		RULE_structural_stmt = 4, RULE_functional_stmt = 5, RULE_energizing_stmt = 6, 
-		RULE_struct_multinoun = 7, RULE_multi_flow = 8, RULE_flow = 9, RULE_material = 10;
+		RULE_structural_stmts = 4, RULE_structural_stmt = 5, RULE_connection_stmt = 6, 
+		RULE_functional_stmt = 7, RULE_energizing_stmt = 8, RULE_struct_multinoun = 9, 
+		RULE_multi_flow = 10, RULE_flow = 11, RULE_material = 12;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"nlparch", "sentences", "sentence", "functional_stmts", "structural_stmt", 
-			"functional_stmt", "energizing_stmt", "struct_multinoun", "multi_flow", 
-			"flow", "material"
+			"nlparch", "sentences", "sentence", "functional_stmts", "structural_stmts", 
+			"structural_stmt", "connection_stmt", "functional_stmt", "energizing_stmt", 
+			"struct_multinoun", "multi_flow", "flow", "material"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, null, "','", "'and'", "'.'", "'it'", "'to'", "'them'", "'from'", 
-			"'consists'", null, null, "'ground coffee'", null, "'steam'"
+			null, null, "'connected'", "','", "'and'", "'.'", "'it'", "'to'", "'them'", 
+			"'from'", "'consists'", null, null, "'ground coffee'", null, "'steam'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "Struct_noun", "Comma", "And", "End", "IT", "TO", "THEM", "FROM", 
-			"Struct_verb", "FUNC_VERB", "ENERGY", "SOLID", "LIQUID", "GAS", "SIGNAL", 
-			"WS"
+			null, "Struct_noun", "Connected_Verb", "Comma", "And", "End", "IT", "TO", 
+			"THEM", "FROM", "Struct_verb", "FUNC_VERB", "ENERGY", "SOLID", "LIQUID", 
+			"GAS", "SIGNAL", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -132,17 +134,17 @@ public class TextToAADLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(23); 
+			setState(27); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(22);
+				setState(26);
 				sentences();
 				}
 				}
-				setState(25); 
+				setState(29); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==Struct_noun );
@@ -192,7 +194,7 @@ public class TextToAADLParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(28); 
+			setState(32); 
 			_errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -200,7 +202,7 @@ public class TextToAADLParser extends Parser {
 				case 1:
 					{
 					{
-					setState(27);
+					setState(31);
 					sentence();
 					}
 					}
@@ -208,7 +210,7 @@ public class TextToAADLParser extends Parser {
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(30); 
+				setState(34); 
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
 			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
@@ -226,11 +228,11 @@ public class TextToAADLParser extends Parser {
 	}
 
 	public static class SentenceContext extends ParserRuleContext {
-		public List<Structural_stmtContext> structural_stmt() {
-			return getRuleContexts(Structural_stmtContext.class);
+		public List<Structural_stmtsContext> structural_stmts() {
+			return getRuleContexts(Structural_stmtsContext.class);
 		}
-		public Structural_stmtContext structural_stmt(int i) {
-			return getRuleContext(Structural_stmtContext.class,i);
+		public Structural_stmtsContext structural_stmts(int i) {
+			return getRuleContext(Structural_stmtsContext.class,i);
 		}
 		public List<Functional_stmtsContext> functional_stmts() {
 			return getRuleContexts(Functional_stmtsContext.class);
@@ -262,14 +264,14 @@ public class TextToAADLParser extends Parser {
 		enterRule(_localctx, 4, RULE_sentence);
 		try {
 			int _alt;
-			setState(42);
+			setState(46);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
 				{
-				setState(33); 
+				setState(37); 
 				_errHandler.sync(this);
 				_alt = 1;
 				do {
@@ -277,15 +279,15 @@ public class TextToAADLParser extends Parser {
 					case 1:
 						{
 						{
-						setState(32);
-						structural_stmt();
+						setState(36);
+						structural_stmts();
 						}
 						}
 						break;
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(35); 
+					setState(39); 
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
 				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
@@ -296,7 +298,7 @@ public class TextToAADLParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				{
-				setState(38); 
+				setState(42); 
 				_errHandler.sync(this);
 				_alt = 1;
 				do {
@@ -304,7 +306,7 @@ public class TextToAADLParser extends Parser {
 					case 1:
 						{
 						{
-						setState(37);
+						setState(41);
 						functional_stmts();
 						}
 						}
@@ -312,7 +314,7 @@ public class TextToAADLParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(40); 
+					setState(44); 
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
@@ -366,13 +368,13 @@ public class TextToAADLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(46);
+			setState(50);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 			case 1:
 				{
 				{
-				setState(44);
+				setState(48);
 				functional_stmt();
 				}
 				}
@@ -380,15 +382,86 @@ public class TextToAADLParser extends Parser {
 			case 2:
 				{
 				{
-				setState(45);
+				setState(49);
 				energizing_stmt();
 				}
 				}
 				break;
 			}
-			setState(48);
+			setState(52);
 			match(End);
-			setState(49);
+			setState(53);
+			match(WS);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Structural_stmtsContext extends ParserRuleContext {
+		public TerminalNode End() { return getToken(TextToAADLParser.End, 0); }
+		public TerminalNode WS() { return getToken(TextToAADLParser.WS, 0); }
+		public Structural_stmtContext structural_stmt() {
+			return getRuleContext(Structural_stmtContext.class,0);
+		}
+		public Connection_stmtContext connection_stmt() {
+			return getRuleContext(Connection_stmtContext.class,0);
+		}
+		public Structural_stmtsContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_structural_stmts; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TextToAADLListener ) ((TextToAADLListener)listener).enterStructural_stmts(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TextToAADLListener ) ((TextToAADLListener)listener).exitStructural_stmts(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TextToAADLVisitor ) return ((TextToAADLVisitor<? extends T>)visitor).visitStructural_stmts(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Structural_stmtsContext structural_stmts() throws RecognitionException {
+		Structural_stmtsContext _localctx = new Structural_stmtsContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_structural_stmts);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(57);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
+			case 1:
+				{
+				{
+				setState(55);
+				structural_stmt();
+				}
+				}
+				break;
+			case 2:
+				{
+				{
+				setState(56);
+				connection_stmt();
+				}
+				}
+				break;
+			}
+			setState(59);
+			match(End);
+			setState(60);
 			match(WS);
 			}
 		}
@@ -413,7 +486,6 @@ public class TextToAADLParser extends Parser {
 		public Struct_multinounContext struct_multinoun() {
 			return getRuleContext(Struct_multinounContext.class,0);
 		}
-		public TerminalNode End() { return getToken(TextToAADLParser.End, 0); }
 		public Structural_stmtContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -435,24 +507,83 @@ public class TextToAADLParser extends Parser {
 
 	public final Structural_stmtContext structural_stmt() throws RecognitionException {
 		Structural_stmtContext _localctx = new Structural_stmtContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_structural_stmt);
+		enterRule(_localctx, 10, RULE_structural_stmt);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(51);
+			setState(62);
 			match(Struct_noun);
-			setState(52);
+			setState(63);
 			match(WS);
-			setState(53);
+			setState(64);
 			match(Struct_verb);
-			setState(54);
+			setState(65);
 			match(WS);
-			setState(55);
+			setState(66);
 			struct_multinoun();
-			setState(56);
-			match(End);
-			setState(57);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Connection_stmtContext extends ParserRuleContext {
+		public TerminalNode Struct_noun() { return getToken(TextToAADLParser.Struct_noun, 0); }
+		public List<TerminalNode> WS() { return getTokens(TextToAADLParser.WS); }
+		public TerminalNode WS(int i) {
+			return getToken(TextToAADLParser.WS, i);
+		}
+		public TerminalNode Connected_Verb() { return getToken(TextToAADLParser.Connected_Verb, 0); }
+		public TerminalNode TO() { return getToken(TextToAADLParser.TO, 0); }
+		public Struct_multinounContext struct_multinoun() {
+			return getRuleContext(Struct_multinounContext.class,0);
+		}
+		public Connection_stmtContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_connection_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof TextToAADLListener ) ((TextToAADLListener)listener).enterConnection_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof TextToAADLListener ) ((TextToAADLListener)listener).exitConnection_stmt(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof TextToAADLVisitor ) return ((TextToAADLVisitor<? extends T>)visitor).visitConnection_stmt(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final Connection_stmtContext connection_stmt() throws RecognitionException {
+		Connection_stmtContext _localctx = new Connection_stmtContext(_ctx, getState());
+		enterRule(_localctx, 12, RULE_connection_stmt);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(68);
+			match(Struct_noun);
+			setState(69);
 			match(WS);
+			setState(70);
+			match(Connected_Verb);
+			setState(71);
+			match(WS);
+			setState(72);
+			match(TO);
+			setState(73);
+			match(WS);
+			setState(74);
+			struct_multinoun();
 			}
 		}
 		catch (RecognitionException re) {
@@ -510,40 +641,40 @@ public class TextToAADLParser extends Parser {
 
 	public final Functional_stmtContext functional_stmt() throws RecognitionException {
 		Functional_stmtContext _localctx = new Functional_stmtContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_functional_stmt);
+		enterRule(_localctx, 14, RULE_functional_stmt);
 		try {
-			setState(114);
+			setState(131);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
 				{
-				setState(59);
+				setState(76);
 				match(Struct_noun);
-				setState(60);
+				setState(77);
 				match(WS);
-				setState(61);
+				setState(78);
 				match(FUNC_VERB);
-				setState(62);
+				setState(79);
 				match(WS);
-				setState(63);
+				setState(80);
 				multi_flow();
-				setState(64);
+				setState(81);
 				match(WS);
-				setState(65);
+				setState(82);
 				match(FROM);
-				setState(66);
+				setState(83);
 				match(WS);
-				setState(67);
+				setState(84);
 				match(Struct_noun);
-				setState(68);
+				setState(85);
 				match(WS);
-				setState(69);
+				setState(86);
 				match(TO);
-				setState(70);
+				setState(87);
 				match(WS);
-				setState(71);
+				setState(88);
 				match(Struct_noun);
 				}
 				}
@@ -552,23 +683,23 @@ public class TextToAADLParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				{
-				setState(73);
+				setState(90);
 				match(Struct_noun);
-				setState(74);
+				setState(91);
 				match(WS);
-				setState(75);
+				setState(92);
 				match(FUNC_VERB);
-				setState(76);
+				setState(93);
 				match(WS);
-				setState(77);
+				setState(94);
 				multi_flow();
-				setState(78);
+				setState(95);
 				match(WS);
-				setState(79);
+				setState(96);
 				match(TO);
-				setState(80);
+				setState(97);
 				match(WS);
-				setState(81);
+				setState(98);
 				match(Struct_noun);
 				}
 				}
@@ -577,23 +708,23 @@ public class TextToAADLParser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				{
-				setState(83);
+				setState(100);
 				match(Struct_noun);
-				setState(84);
+				setState(101);
 				match(WS);
-				setState(85);
+				setState(102);
 				match(FUNC_VERB);
-				setState(86);
+				setState(103);
 				match(WS);
-				setState(87);
+				setState(104);
 				multi_flow();
-				setState(88);
+				setState(105);
 				match(WS);
-				setState(89);
+				setState(106);
 				match(FROM);
-				setState(90);
+				setState(107);
 				match(WS);
-				setState(91);
+				setState(108);
 				match(Struct_noun);
 				}
 				}
@@ -602,35 +733,35 @@ public class TextToAADLParser extends Parser {
 				enterOuterAlt(_localctx, 4);
 				{
 				{
-				setState(93);
+				setState(110);
 				match(Struct_noun);
-				setState(94);
+				setState(111);
 				match(WS);
-				setState(95);
+				setState(112);
 				match(FUNC_VERB);
-				setState(96);
+				setState(113);
 				match(WS);
-				setState(97);
+				setState(114);
 				multi_flow();
-				setState(98);
+				setState(115);
 				match(WS);
-				setState(99);
+				setState(116);
 				match(And);
-				setState(100);
+				setState(117);
 				match(WS);
-				setState(101);
+				setState(118);
 				match(FUNC_VERB);
-				setState(102);
+				setState(119);
 				match(WS);
-				setState(103);
+				setState(120);
 				match(IT);
-				setState(104);
+				setState(121);
 				match(WS);
-				setState(105);
+				setState(122);
 				match(TO);
-				setState(106);
+				setState(123);
 				match(WS);
-				setState(107);
+				setState(124);
 				flow();
 				}
 				}
@@ -639,15 +770,15 @@ public class TextToAADLParser extends Parser {
 				enterOuterAlt(_localctx, 5);
 				{
 				{
-				setState(109);
+				setState(126);
 				match(Struct_noun);
-				setState(110);
+				setState(127);
 				match(WS);
-				setState(111);
+				setState(128);
 				match(FUNC_VERB);
-				setState(112);
+				setState(129);
 				match(WS);
-				setState(113);
+				setState(130);
 				multi_flow();
 				}
 				}
@@ -704,35 +835,35 @@ public class TextToAADLParser extends Parser {
 
 	public final Energizing_stmtContext energizing_stmt() throws RecognitionException {
 		Energizing_stmtContext _localctx = new Energizing_stmtContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_energizing_stmt);
+		enterRule(_localctx, 16, RULE_energizing_stmt);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(116);
+			setState(133);
 			match(Struct_noun);
-			setState(117);
+			setState(134);
 			match(WS);
-			setState(118);
+			setState(135);
 			match(FUNC_VERB);
-			setState(119);
+			setState(136);
 			match(WS);
-			setState(120);
+			setState(137);
 			multi_flow();
-			setState(121);
+			setState(138);
 			match(WS);
-			setState(122);
+			setState(139);
 			match(And);
-			setState(123);
+			setState(140);
 			match(WS);
-			setState(124);
+			setState(141);
 			match(FUNC_VERB);
-			setState(125);
+			setState(142);
 			match(WS);
-			setState(126);
+			setState(143);
 			match(TO);
-			setState(127);
+			setState(144);
 			match(WS);
-			setState(128);
+			setState(145);
 			multi_flow();
 			}
 		}
@@ -782,24 +913,24 @@ public class TextToAADLParser extends Parser {
 
 	public final Struct_multinounContext struct_multinoun() throws RecognitionException {
 		Struct_multinounContext _localctx = new Struct_multinounContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_struct_multinoun);
+		enterRule(_localctx, 18, RULE_struct_multinoun);
 		try {
-			setState(141);
+			setState(158);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,7,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
 				{
-				setState(130);
+				setState(147);
 				match(Struct_noun);
-				setState(131);
+				setState(148);
 				match(WS);
-				setState(132);
+				setState(149);
 				match(Comma);
-				setState(133);
+				setState(150);
 				match(WS);
-				setState(134);
+				setState(151);
 				struct_multinoun();
 				}
 				}
@@ -808,15 +939,15 @@ public class TextToAADLParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				{
-				setState(135);
+				setState(152);
 				match(Struct_noun);
-				setState(136);
+				setState(153);
 				match(WS);
-				setState(137);
+				setState(154);
 				match(And);
-				setState(138);
+				setState(155);
 				match(WS);
-				setState(139);
+				setState(156);
 				match(Struct_noun);
 				}
 				}
@@ -825,7 +956,7 @@ public class TextToAADLParser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				{
-				setState(140);
+				setState(157);
 				match(Struct_noun);
 				}
 				}
@@ -880,15 +1011,15 @@ public class TextToAADLParser extends Parser {
 
 	public final Multi_flowContext multi_flow() throws RecognitionException {
 		Multi_flowContext _localctx = new Multi_flowContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_multi_flow);
+		enterRule(_localctx, 20, RULE_multi_flow);
 		try {
-			setState(156);
+			setState(173);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(143);
+				setState(160);
 				flow();
 				}
 				break;
@@ -896,15 +1027,15 @@ public class TextToAADLParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				{
-				setState(144);
+				setState(161);
 				flow();
-				setState(145);
+				setState(162);
 				match(WS);
-				setState(146);
+				setState(163);
 				match(And);
-				setState(147);
+				setState(164);
 				match(WS);
-				setState(148);
+				setState(165);
 				flow();
 				}
 				}
@@ -913,15 +1044,15 @@ public class TextToAADLParser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				{
-				setState(150);
+				setState(167);
 				flow();
-				setState(151);
+				setState(168);
 				match(WS);
-				setState(152);
+				setState(169);
 				match(Comma);
-				setState(153);
+				setState(170);
 				match(WS);
-				setState(154);
+				setState(171);
 				multi_flow();
 				}
 				}
@@ -966,9 +1097,9 @@ public class TextToAADLParser extends Parser {
 
 	public final FlowContext flow() throws RecognitionException {
 		FlowContext _localctx = new FlowContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_flow);
+		enterRule(_localctx, 22, RULE_flow);
 		try {
-			setState(161);
+			setState(178);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case SOLID:
@@ -976,21 +1107,21 @@ public class TextToAADLParser extends Parser {
 			case GAS:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(158);
+				setState(175);
 				material();
 				}
 				break;
 			case ENERGY:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(159);
+				setState(176);
 				match(ENERGY);
 				}
 				break;
 			case SIGNAL:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(160);
+				setState(177);
 				match(SIGNAL);
 				}
 				break;
@@ -1034,12 +1165,12 @@ public class TextToAADLParser extends Parser {
 
 	public final MaterialContext material() throws RecognitionException {
 		MaterialContext _localctx = new MaterialContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_material);
+		enterRule(_localctx, 24, RULE_material);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(163);
+			setState(180);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << SOLID) | (1L << LIQUID) | (1L << GAS))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1063,52 +1194,59 @@ public class TextToAADLParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\22\u00a8\4\2\t\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\23\u00b9\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
-		"\t\13\4\f\t\f\3\2\6\2\32\n\2\r\2\16\2\33\3\3\6\3\37\n\3\r\3\16\3 \3\4"+
-		"\6\4$\n\4\r\4\16\4%\3\4\6\4)\n\4\r\4\16\4*\5\4-\n\4\3\5\3\5\5\5\61\n\5"+
-		"\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3\7\3\7\3\7\3\7\3"+
-		"\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7"+
-		"\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3"+
-		"\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\5\7u\n\7\3\b\3"+
-		"\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t"+
-		"\3\t\3\t\3\t\3\t\3\t\3\t\5\t\u0090\n\t\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n"+
-		"\3\n\3\n\3\n\3\n\3\n\5\n\u009f\n\n\3\13\3\13\3\13\5\13\u00a4\n\13\3\f"+
-		"\3\f\3\f\2\2\r\2\4\6\b\n\f\16\20\22\24\26\2\3\3\2\16\20\2\u00ac\2\31\3"+
-		"\2\2\2\4\36\3\2\2\2\6,\3\2\2\2\b\60\3\2\2\2\n\65\3\2\2\2\ft\3\2\2\2\16"+
-		"v\3\2\2\2\20\u008f\3\2\2\2\22\u009e\3\2\2\2\24\u00a3\3\2\2\2\26\u00a5"+
-		"\3\2\2\2\30\32\5\4\3\2\31\30\3\2\2\2\32\33\3\2\2\2\33\31\3\2\2\2\33\34"+
-		"\3\2\2\2\34\3\3\2\2\2\35\37\5\6\4\2\36\35\3\2\2\2\37 \3\2\2\2 \36\3\2"+
-		"\2\2 !\3\2\2\2!\5\3\2\2\2\"$\5\n\6\2#\"\3\2\2\2$%\3\2\2\2%#\3\2\2\2%&"+
-		"\3\2\2\2&-\3\2\2\2\')\5\b\5\2(\'\3\2\2\2)*\3\2\2\2*(\3\2\2\2*+\3\2\2\2"+
-		"+-\3\2\2\2,#\3\2\2\2,(\3\2\2\2-\7\3\2\2\2.\61\5\f\7\2/\61\5\16\b\2\60"+
-		".\3\2\2\2\60/\3\2\2\2\61\62\3\2\2\2\62\63\7\6\2\2\63\64\7\22\2\2\64\t"+
-		"\3\2\2\2\65\66\7\3\2\2\66\67\7\22\2\2\678\7\13\2\289\7\22\2\29:\5\20\t"+
-		"\2:;\7\6\2\2;<\7\22\2\2<\13\3\2\2\2=>\7\3\2\2>?\7\22\2\2?@\7\f\2\2@A\7"+
-		"\22\2\2AB\5\22\n\2BC\7\22\2\2CD\7\n\2\2DE\7\22\2\2EF\7\3\2\2FG\7\22\2"+
-		"\2GH\7\b\2\2HI\7\22\2\2IJ\7\3\2\2Ju\3\2\2\2KL\7\3\2\2LM\7\22\2\2MN\7\f"+
-		"\2\2NO\7\22\2\2OP\5\22\n\2PQ\7\22\2\2QR\7\b\2\2RS\7\22\2\2ST\7\3\2\2T"+
-		"u\3\2\2\2UV\7\3\2\2VW\7\22\2\2WX\7\f\2\2XY\7\22\2\2YZ\5\22\n\2Z[\7\22"+
-		"\2\2[\\\7\n\2\2\\]\7\22\2\2]^\7\3\2\2^u\3\2\2\2_`\7\3\2\2`a\7\22\2\2a"+
-		"b\7\f\2\2bc\7\22\2\2cd\5\22\n\2de\7\22\2\2ef\7\5\2\2fg\7\22\2\2gh\7\f"+
-		"\2\2hi\7\22\2\2ij\7\7\2\2jk\7\22\2\2kl\7\b\2\2lm\7\22\2\2mn\5\24\13\2"+
-		"nu\3\2\2\2op\7\3\2\2pq\7\22\2\2qr\7\f\2\2rs\7\22\2\2su\5\22\n\2t=\3\2"+
-		"\2\2tK\3\2\2\2tU\3\2\2\2t_\3\2\2\2to\3\2\2\2u\r\3\2\2\2vw\7\3\2\2wx\7"+
-		"\22\2\2xy\7\f\2\2yz\7\22\2\2z{\5\22\n\2{|\7\22\2\2|}\7\5\2\2}~\7\22\2"+
-		"\2~\177\7\f\2\2\177\u0080\7\22\2\2\u0080\u0081\7\b\2\2\u0081\u0082\7\22"+
-		"\2\2\u0082\u0083\5\22\n\2\u0083\17\3\2\2\2\u0084\u0085\7\3\2\2\u0085\u0086"+
-		"\7\22\2\2\u0086\u0087\7\4\2\2\u0087\u0088\7\22\2\2\u0088\u0090\5\20\t"+
-		"\2\u0089\u008a\7\3\2\2\u008a\u008b\7\22\2\2\u008b\u008c\7\5\2\2\u008c"+
-		"\u008d\7\22\2\2\u008d\u0090\7\3\2\2\u008e\u0090\7\3\2\2\u008f\u0084\3"+
-		"\2\2\2\u008f\u0089\3\2\2\2\u008f\u008e\3\2\2\2\u0090\21\3\2\2\2\u0091"+
-		"\u009f\5\24\13\2\u0092\u0093\5\24\13\2\u0093\u0094\7\22\2\2\u0094\u0095"+
-		"\7\5\2\2\u0095\u0096\7\22\2\2\u0096\u0097\5\24\13\2\u0097\u009f\3\2\2"+
-		"\2\u0098\u0099\5\24\13\2\u0099\u009a\7\22\2\2\u009a\u009b\7\4\2\2\u009b"+
-		"\u009c\7\22\2\2\u009c\u009d\5\22\n\2\u009d\u009f\3\2\2\2\u009e\u0091\3"+
-		"\2\2\2\u009e\u0092\3\2\2\2\u009e\u0098\3\2\2\2\u009f\23\3\2\2\2\u00a0"+
-		"\u00a4\5\26\f\2\u00a1\u00a4\7\r\2\2\u00a2\u00a4\7\21\2\2\u00a3\u00a0\3"+
-		"\2\2\2\u00a3\u00a1\3\2\2\2\u00a3\u00a2\3\2\2\2\u00a4\25\3\2\2\2\u00a5"+
-		"\u00a6\t\2\2\2\u00a6\27\3\2\2\2\f\33 %*,\60t\u008f\u009e\u00a3";
+		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\3\2\6\2\36\n\2\r\2\16\2\37\3\3\6\3#\n"+
+		"\3\r\3\16\3$\3\4\6\4(\n\4\r\4\16\4)\3\4\6\4-\n\4\r\4\16\4.\5\4\61\n\4"+
+		"\3\5\3\5\5\5\65\n\5\3\5\3\5\3\5\3\6\3\6\5\6<\n\6\3\6\3\6\3\6\3\7\3\7\3"+
+		"\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\t"+
+		"\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3"+
+		"\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t"+
+		"\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\5\t\u0086\n\t"+
+		"\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13"+
+		"\3\13\3\13\3\13\3\13\3\13\3\13\3\13\3\13\5\13\u00a1\n\13\3\f\3\f\3\f\3"+
+		"\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\5\f\u00b0\n\f\3\r\3\r\3\r\5\r\u00b5"+
+		"\n\r\3\16\3\16\3\16\2\2\17\2\4\6\b\n\f\16\20\22\24\26\30\32\2\3\3\2\17"+
+		"\21\2\u00bc\2\35\3\2\2\2\4\"\3\2\2\2\6\60\3\2\2\2\b\64\3\2\2\2\n;\3\2"+
+		"\2\2\f@\3\2\2\2\16F\3\2\2\2\20\u0085\3\2\2\2\22\u0087\3\2\2\2\24\u00a0"+
+		"\3\2\2\2\26\u00af\3\2\2\2\30\u00b4\3\2\2\2\32\u00b6\3\2\2\2\34\36\5\4"+
+		"\3\2\35\34\3\2\2\2\36\37\3\2\2\2\37\35\3\2\2\2\37 \3\2\2\2 \3\3\2\2\2"+
+		"!#\5\6\4\2\"!\3\2\2\2#$\3\2\2\2$\"\3\2\2\2$%\3\2\2\2%\5\3\2\2\2&(\5\n"+
+		"\6\2\'&\3\2\2\2()\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*\61\3\2\2\2+-\5\b\5\2,"+
+		"+\3\2\2\2-.\3\2\2\2.,\3\2\2\2./\3\2\2\2/\61\3\2\2\2\60\'\3\2\2\2\60,\3"+
+		"\2\2\2\61\7\3\2\2\2\62\65\5\20\t\2\63\65\5\22\n\2\64\62\3\2\2\2\64\63"+
+		"\3\2\2\2\65\66\3\2\2\2\66\67\7\7\2\2\678\7\23\2\28\t\3\2\2\29<\5\f\7\2"+
+		":<\5\16\b\2;9\3\2\2\2;:\3\2\2\2<=\3\2\2\2=>\7\7\2\2>?\7\23\2\2?\13\3\2"+
+		"\2\2@A\7\3\2\2AB\7\23\2\2BC\7\f\2\2CD\7\23\2\2DE\5\24\13\2E\r\3\2\2\2"+
+		"FG\7\3\2\2GH\7\23\2\2HI\7\4\2\2IJ\7\23\2\2JK\7\t\2\2KL\7\23\2\2LM\5\24"+
+		"\13\2M\17\3\2\2\2NO\7\3\2\2OP\7\23\2\2PQ\7\r\2\2QR\7\23\2\2RS\5\26\f\2"+
+		"ST\7\23\2\2TU\7\13\2\2UV\7\23\2\2VW\7\3\2\2WX\7\23\2\2XY\7\t\2\2YZ\7\23"+
+		"\2\2Z[\7\3\2\2[\u0086\3\2\2\2\\]\7\3\2\2]^\7\23\2\2^_\7\r\2\2_`\7\23\2"+
+		"\2`a\5\26\f\2ab\7\23\2\2bc\7\t\2\2cd\7\23\2\2de\7\3\2\2e\u0086\3\2\2\2"+
+		"fg\7\3\2\2gh\7\23\2\2hi\7\r\2\2ij\7\23\2\2jk\5\26\f\2kl\7\23\2\2lm\7\13"+
+		"\2\2mn\7\23\2\2no\7\3\2\2o\u0086\3\2\2\2pq\7\3\2\2qr\7\23\2\2rs\7\r\2"+
+		"\2st\7\23\2\2tu\5\26\f\2uv\7\23\2\2vw\7\6\2\2wx\7\23\2\2xy\7\r\2\2yz\7"+
+		"\23\2\2z{\7\b\2\2{|\7\23\2\2|}\7\t\2\2}~\7\23\2\2~\177\5\30\r\2\177\u0086"+
+		"\3\2\2\2\u0080\u0081\7\3\2\2\u0081\u0082\7\23\2\2\u0082\u0083\7\r\2\2"+
+		"\u0083\u0084\7\23\2\2\u0084\u0086\5\26\f\2\u0085N\3\2\2\2\u0085\\\3\2"+
+		"\2\2\u0085f\3\2\2\2\u0085p\3\2\2\2\u0085\u0080\3\2\2\2\u0086\21\3\2\2"+
+		"\2\u0087\u0088\7\3\2\2\u0088\u0089\7\23\2\2\u0089\u008a\7\r\2\2\u008a"+
+		"\u008b\7\23\2\2\u008b\u008c\5\26\f\2\u008c\u008d\7\23\2\2\u008d\u008e"+
+		"\7\6\2\2\u008e\u008f\7\23\2\2\u008f\u0090\7\r\2\2\u0090\u0091\7\23\2\2"+
+		"\u0091\u0092\7\t\2\2\u0092\u0093\7\23\2\2\u0093\u0094\5\26\f\2\u0094\23"+
+		"\3\2\2\2\u0095\u0096\7\3\2\2\u0096\u0097\7\23\2\2\u0097\u0098\7\5\2\2"+
+		"\u0098\u0099\7\23\2\2\u0099\u00a1\5\24\13\2\u009a\u009b\7\3\2\2\u009b"+
+		"\u009c\7\23\2\2\u009c\u009d\7\6\2\2\u009d\u009e\7\23\2\2\u009e\u00a1\7"+
+		"\3\2\2\u009f\u00a1\7\3\2\2\u00a0\u0095\3\2\2\2\u00a0\u009a\3\2\2\2\u00a0"+
+		"\u009f\3\2\2\2\u00a1\25\3\2\2\2\u00a2\u00b0\5\30\r\2\u00a3\u00a4\5\30"+
+		"\r\2\u00a4\u00a5\7\23\2\2\u00a5\u00a6\7\6\2\2\u00a6\u00a7\7\23\2\2\u00a7"+
+		"\u00a8\5\30\r\2\u00a8\u00b0\3\2\2\2\u00a9\u00aa\5\30\r\2\u00aa\u00ab\7"+
+		"\23\2\2\u00ab\u00ac\7\5\2\2\u00ac\u00ad\7\23\2\2\u00ad\u00ae\5\26\f\2"+
+		"\u00ae\u00b0\3\2\2\2\u00af\u00a2\3\2\2\2\u00af\u00a3\3\2\2\2\u00af\u00a9"+
+		"\3\2\2\2\u00b0\27\3\2\2\2\u00b1\u00b5\5\32\16\2\u00b2\u00b5\7\16\2\2\u00b3"+
+		"\u00b5\7\22\2\2\u00b4\u00b1\3\2\2\2\u00b4\u00b2\3\2\2\2\u00b4\u00b3\3"+
+		"\2\2\2\u00b5\31\3\2\2\2\u00b6\u00b7\t\2\2\2\u00b7\33\3\2\2\2\r\37$).\60"+
+		"\64;\u0085\u00a0\u00af\u00b4";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
