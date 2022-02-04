@@ -34,6 +34,7 @@ from nltk.stem import WordNetLemmatizer
 
 input_paragraph = "The coffeemaker consists of a brewer and a pot. The pot consists of a glassware, a lid, and a handle. The brewer is composed of a tank, a heating unit, a brewing unit, and a dispensing unit. The heating unit consists of a heating coil, a hot water pipe, and a water valve. The heating coil imports electricity and converts it into heat. The heating coil transfers heat to the water pipe. The water pipe imports water and heat and energizes water with heat. The vertical pipe transfers hot water from the water pipe to the shower head. The brewing unit consists of a shower head, a filter, and a filter holder. The shower head imports hot water from the vertical pipe and distributes it. The filter imports ground coffee and hot water from the shower head, couples these two flows,and exports liquid coffee. The filter separates liquid coffee from the ground coffee and exports it to the glassware."
 energy_list=['heat','electricity','water','steam','kinetic','chemical','electrical','mechanical','thermal','nuclear','gravitational', 'hot']
+word_accept=['contains','imports','exports','converts','transfers','receives','energizes','deenergizes','distributes','separates','couples','stores','supplies'];
 
 
 
