@@ -1,0 +1,9 @@
+The FGS_System consists of L_FGS, R_FGS, LR_Bus, RL_Bus, CLK1, CLK2, CLK3 and CLK4. 
+LR_Bus transfers Left_Pilot_Flying_Side from L_FGS to R_FGS. 
+RL_Bus transfers Right_Pilot_Flying_Side from R_FGS to L_FGS. 
+The L_FGS imports TS_Bool_L and PS_Bool_L. 
+The R_FGS imports TS_Bool_L and PS_Bool_L. 
+L_FGS receives temporal value from CLK1. 
+LR_Bus receives temporal value from CLK2. 
+R_FGS receives temporal value from CLK3. 
+RL_Bus receives temporal value from CLK4.
