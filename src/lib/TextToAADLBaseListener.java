@@ -66,6 +66,18 @@ public class TextToAADLBaseListener implements TextToAADLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterStructural_stmts(TextToAADLParser.Structural_stmtsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStructural_stmts(TextToAADLParser.Structural_stmtsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterStructural_stmt(TextToAADLParser.Structural_stmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -73,6 +85,18 @@ public class TextToAADLBaseListener implements TextToAADLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStructural_stmt(TextToAADLParser.Structural_stmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConnection_stmt(TextToAADLParser.Connection_stmtContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConnection_stmt(TextToAADLParser.Connection_stmtContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

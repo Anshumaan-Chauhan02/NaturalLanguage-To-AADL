@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         try {
 
-            String inputFile = readInputFile("./src/data/CoffeeMaker1.txt");
+            String inputFile = readInputFile("./src/data/NLP Output HairDryer.txt");
             String input = cleanText(inputFile);
 //            System.out.println(input);
             ANTLRInputStream inputStream = new ANTLRInputStream(input);
@@ -29,8 +29,8 @@ public class Main {
             visitor.visit(parser.nlparch());
             for(int i=0;i<=visitor.index-1;i++){
 //                System.out.println(visitor.system_names[i]);
-//                System.out.println(visitor.system_declaration[i][0]);
-//                System.out.println(visitor.system_declaration[i][1]);
+                System.out.println(visitor.system_declaration[i][0]);
+                System.out.println(visitor.system_declaration[i][1]);
             }
         } catch (Exception e) {
             e.printStackTrace();
