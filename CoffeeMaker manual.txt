@@ -1,11 +1,11 @@
 The coffeemaker consists of a brewer and a pot. 
-The pot consists of a glassware, a lid, and a handle. 
+The pot consists of a glassware, a lid and a handle. 
 The brewer is composed of a tank, a heating unit, a brewing unit, a vertical pipe and a dispensing unit. 
-The heating unit consists of a heating coil, a hot water pipe, and a water valve. 
+The heating unit consists of a heating coil, a hot water pipe and a water valve. 
 The heating coil imports electricity and converts it to heat. 
 The heating coil transfers heat to the hot water pipe. 
 The hot water pipe imports water and heat and energizes it to hot water.
-The brewing unit consists of a shower head, a filter, and a filter holder. 
+The brewing unit consists of a shower head, a filter and a filter holder. 
 The vertical pipe transfers hot water from the hot water pipe to the shower head. 
 The filter imports ground coffee and hot water from the shower head.
 The filter couples ground coffee and hot water
