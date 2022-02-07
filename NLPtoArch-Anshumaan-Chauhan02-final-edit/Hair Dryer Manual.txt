@@ -1,0 +1,24 @@
+A hairdryer is composed of a user interface.
+The user interface consists of a handle and a body.
+The handle consists of the power unit. 
+The body consists of the propulsion unit and the heating unit.
+The power unit consists of the mains cord, the power switch, the junction box, the heating wires, and the motor wires. 
+The body consists of a barrel, an intake grill, and a discharge opening. 
+The heating unit comprises of a heater core, an insulating sleeve, and a nozzle.
+The mains cord transfers electricity to the power switch.
+The power switch transfers electricity to the junction box. 
+The heating wires transfer electricity from the junction box to the heater core.
+The motor wires transfers electricity from the junction box to the motor.
+The propulsion unit consists of a motor and a fan. 
+The fan is connected to the motor. 
+The intake grill transfers air to the fan.
+The motor transfers mechanical energy to the fan. 
+The fan imports air and energizes to flowing air. 
+The fan transfers flowing air to the heating unit.
+The nozzle consists of a conduit. 
+The heater core converts electricity to thermal energy. 
+The heater core imports air and energizes it to hot flowing air.  
+The conduit transfers hot flowing air to the discharge opening. 
+The discharge opening exports the hot flowing air.
+The handle consists of a hand grip and a power button. 
+The power button is connected to the power switch. 
