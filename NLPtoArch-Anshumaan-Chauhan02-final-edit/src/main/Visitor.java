@@ -135,7 +135,7 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             } else {
                 for (int i = 0; i <= index - 1; i++) {
 
-                    if (token_name.equals(system_names[i])) {
+                    if (token_name.replaceAll("\\s","").equals(system_names[i].replaceAll("\\s",""))) {
                         var = true;
                     }
 
@@ -295,10 +295,9 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             }
             else
             {
-                for(int i=0;i<=index_ports-1;i++)
+                for(int i=0;i<=index_features-1;i++)
                 {
-                    StringTokenizer seprarte_ports=new StringTokenizer(portnames[i]);
-                    String comp_name=seprarte_ports.nextToken();
+                    String comp_name=sys_features[i];
                     if(comp_name.equals(connected_to))
                     {
                         already_features_each_comp=true;
@@ -316,6 +315,8 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                                 {
                                     newdecl=newdecl+"\n\tfeatures\n";
                                     done_features=true;
+                                    sys_features[index_features]=system_names[i];
+                                    index_features+=1;
                                 }
                                 else
                                 {
@@ -352,11 +353,11 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                             if(index_new_line==j)
                             {  boolean check_port=false;
                             int index_port_now=0;
-                                dec_conn_comp=dec_conn_comp+"\n\t\tconnection_to_"+connected_to+" : out event port;\n";
+                                dec_conn_comp=dec_conn_comp+"\n\t\tconnection_to_"+connected_to.replaceAll("\\s","")+" : out event port;\n";
                                 for(int s=0;s<=index_ports-1;s++)
                                 { StringTokenizer add_ports=new StringTokenizer(portnames[s]);
                                 String name_comp=add_ports.nextToken();
-                                    if(name_comp.equals(conn_comp))
+                                    if(name_comp.replaceAll("\\s","").equals(conn_comp.replaceAll("\\s","")))
                                     {
                                         check_port=true;
                                         index_port_now=s;
@@ -364,11 +365,12 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                                 }
                                 if(check_port)
                                 {
-                                    portnames[index_port_now]=portnames[index_port_now]+" "+"connection_to_"+connected_to;
+                                    portnames[index_port_now]=portnames[index_port_now]+" "+"connection_to_"+connected_to.replaceAll("\\s","");
                                 }
                                 else
                                 {
-                                    portnames[index_ports]=portnames[index_ports]+conn_comp+" "+"connection_to_"+connected_to;
+                                    portnames[index_ports]="";
+                                    portnames[index_ports]=portnames[index_ports]+conn_comp+" "+"connection_to_"+connected_to.replaceAll("\\s","");
                                     index_ports+=1;
                                 }
                             }
@@ -404,11 +406,11 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                             if(index_new_line==j)
                             {   boolean check_port=false;
                                 int index_port_now=0;
-                                dec_to_conn=dec_to_conn+"\n\t\tconnection_from_"+conn_comp+" : in event port;\n";
+                                dec_to_conn=dec_to_conn+"\n\t\tconnection_from_"+conn_comp.replaceAll("\\s","")+" : in event port;\n";
                                 for(int s=0;s<=index_ports-1;s++)
                                 { StringTokenizer add_ports=new StringTokenizer(portnames[s]);
                                     String name_comp=add_ports.nextToken();
-                                    if(name_comp.equals(connected_to))
+                                    if(name_comp.replaceAll("\\s","").equals(connected_to.replaceAll("\\s","")))
                                     {
                                         check_port=true;
                                         index_port_now=s;
@@ -416,11 +418,12 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                                 }
                                 if(check_port)
                                 {
-                                    portnames[index_port_now]=portnames[index_port_now]+" "+"connection_from_"+conn_comp;
+                                    portnames[index_port_now]=portnames[index_port_now]+" "+"connection_from_"+conn_comp.replaceAll("\\s","");
                                 }
                                 else
                                 {
-                                    portnames[index_ports]=portnames[index_ports]+connected_to+" "+"connection_from_"+conn_comp;
+                                    portnames[index_ports]="";
+                                    portnames[index_ports]=portnames[index_ports]+connected_to+" "+"connection_from_"+conn_comp.replaceAll("\\s","");
                                     index_ports+=1;
                                 }
                             }
@@ -458,7 +461,13 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                         }
                         if (check_sub[0] && check_sub[1]) {
                             all_in_c = true;
+//                            System.out.println("Comp1= "+stn[0]+" Comp 2= "+stn[1]+ " Overall comp= " +comp);
+                            break;
                         }
+                    }
+                    if(all_in_c)
+                    {
+                        break;
                     }
                 }
                 if (all_in_c) {
@@ -923,7 +932,13 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                         }
                         if (check_sub[0] && check_sub[1]) {
                             all_in_c = true;
+//                            System.out.println(stn[0]+" "+stn[1]+" "+comp);
+                            break;
                         }
+                    }
+                    if(all_in_c)
+                    {
+                        break;
                     }
                 }
                 if (all_in_c) {
@@ -1212,7 +1227,13 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                     }
                     if (check_sub[0] && check_sub[1]) {
                         all_in_c = true;
-                    }
+//                        System.out.println(stn[0]+" "+stn[1]+" "+comp);
+                        break;
+                                            }
+                }
+                if(all_in_c)
+                {
+                    break;
                 }
             }
             if (all_in_c) {
@@ -1242,7 +1263,6 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                 while (already_done_ports <= index_flows) {
                     int ind_c = 0;
                     for (int k = 0; k <= system_names.length - 1; k++) {
-
                         if (comp.equals(system_names[k])) {
                             ind_c = k;
                         }
@@ -1515,12 +1535,8 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
             for (int i = 0; i <= index_subcomponents - 1; i++) {
                 check_sub[0] = false;
                 check_sub[1] = false;
-                check_sub_2[0] = false;
-                check_sub_2[1] = false;
                 StringTokenizer list_of_sub = new StringTokenizer(system_subcomponents[i]);
-                StringTokenizer list_of_sub_2 = new StringTokenizer(system_subcomponents[i]);
                 comp = list_of_sub.nextToken();
-                comp2 = list_of_sub_2.nextToken();
                 while (list_of_sub.hasMoreTokens()) {
                     String token = list_of_sub.nextToken();
                     if (token.equals(stn[0])) {
@@ -1533,6 +1549,16 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                         all_in_c = true;
                     }
                 }
+                if(all_in_c)
+                {
+                    break;
+                }
+            }
+            for (int i = 0; i <= index_subcomponents - 1; i++) {
+                check_sub_2[0] = false;
+                check_sub_2[1] = false;
+                StringTokenizer list_of_sub_2 = new StringTokenizer(system_subcomponents[i]);
+                comp2 = list_of_sub_2.nextToken();
                 while (list_of_sub_2.hasMoreTokens()) {
                     String token = list_of_sub_2.nextToken();
                     if (token.equals(stn[0])) {
@@ -1545,6 +1571,10 @@ public class Visitor<Object> extends AbstractParseTreeVisitor<Object> implements
                         all_in_c_1 = true;
                     }
                 }
+                    if(all_in_c_1)
+                    {
+                        break;
+                    }
             }
             if (all_in_c) {
                 int ind_c = 0;

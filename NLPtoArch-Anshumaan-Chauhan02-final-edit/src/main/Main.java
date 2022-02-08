@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         try {
 
-            String inputFile = readInputFile("C:\\Users\\AnshumaanChauhan\\Downloads\\NLPtoArch\\NLPtoArch-Anshumaan-Chauhan02-final-edit\\NLP Output FGS_System.txt");
+            String inputFile = readInputFile("C:\\Users\\AnshumaanChauhan\\Downloads\\NLPtoArch\\NLPtoArch-Anshumaan-Chauhan02-final-edit\\NLP Output Updated CoffeeMaker.txt");
             String input = cleanText(inputFile);
 //            System.out.println(input);
             ANTLRInputStream inputStream = new ANTLRInputStream(input);
