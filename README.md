@@ -12,6 +12,7 @@ Paper link : https://asmedigitalcollection.asme.org/IDETC-CIE/proceedings-abstra
 ![Jupyter Notebook](https://img.shields.io/badge/jupyter-%23FA0F00.svg?style=for-the-badge&logo=jupyter&logoColor=white)
 
 ### File Description and Content 
+* nlptoarchfinal.py : Natural Language Processing done on the text to get it into proper compiler accepted format
 * src/data/ : This folder contains all the English language inputs used for the testing of the system
 * src/lib/ : Contains all the jar files and the compiler files (Lexer, Parser and Visitor)
 * src/main/GrammarVerifier.java : Verifies whether the input text is according to the syntax
