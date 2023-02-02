@@ -2,10 +2,9 @@
 
 <h4 align='center'> Project Description </h4> 
 Model based engineering has enabled automated analytical reasoning early in the design phase. As a result, inconsistencies and design errors can be captured early in the development lifecycle. But there is still a gap in the natural language-based specifications and its actual implementation. This is because the formal method-based tools utilize mathematical principles and theories of computation that require specific skills, thus reducing the usability of model-based engineering. Natural language is the most widely used method to represent specifications. So, it is intuitive to utilize natural language-based representation to generate system and formal annotations such that it will enable automated architectural analysis with much wider acceptance leading to a much broader impact. In our paper we focus on designing the above-mentioned approach that integrates representation of the specifications in a subset of English language which can then be used to generate system architecture in Architecture Analysis and Design Language along with the generation of functional specifications. We illustrate our approach by validating it with use cases from the aerospace and electromechanical domains. <br>
-
 Paper link : https://asmedigitalcollection.asme.org/IDETC-CIE/proceedings-abstract/IDETC-CIE2022/86212/V002T02A077/1150294
-
 <br>
+
 ### Technical Skills 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
